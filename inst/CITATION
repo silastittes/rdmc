@@ -1,0 +1,13 @@
+
+citHeader("Thank you for citing.")
+          
+citEntry(entry = "Misc", 
+         title = "Distinguishing among modes of convergent adaptation using population genomic data.",
+         author = c(person("Kristin", "Lee"),
+                    person("Graham", "Coop")),
+         year = 2017,
+         url = "https://doi.org/10.1534/genetics.117.300417",
+         textVersion =
+           paste0("Lee, Kristin M., and Graham Coop (", 2017, "). ",
+                 title = "Distinguishing among modes of convergent adaptation using population genomic data.")
+)
