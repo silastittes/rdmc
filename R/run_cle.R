@@ -22,7 +22,7 @@ cle_neutral <-
   }
 
 
-#' Generate data frame for X model
+#' Generate data frame for independent mutations model
 #'
 #'	@param barge List of parameters and data generated using parameter_barge()
 #'	@param cores Number of cores to use. Defaults to 1. if More than one are used, furrr::feautre_pmap is used.
@@ -66,7 +66,7 @@ cle_ind <-
     return(ind_cle)
   }
 
-#' Generate data frame for X model
+#' Generate data frame for migration from a source population model
 #'
 #'	@param barge List of parameters and data generated using parameter_barge()
 #'	@param cores Number of cores to use. Defaults to 1. if More than one are used, furrr::feautre_pmap is used.
@@ -112,7 +112,7 @@ cle_mig <-
   }
 
 
-#' Generate data frame for X model
+#' Generate data frame for standing variation model
 #'
 #'	@param barge List of parameters and data generated using parameter_barge()
 #'	@param cores Number of cores to use. Defaults to 1. if More than one are used, furrr::feautre_pmap is used.
@@ -158,7 +158,7 @@ cle_sv <-
   }
 
 
-#' Generate data frame for X model
+#' Generate data frame for standing variation from a source population model.
 #'
 #'	@param barge List of parameters and data generated using parameter_barge()
 #'	@param cores Number of cores to use. Defaults to 1. if More than one are used, furrr::feautre_pmap is used.
@@ -206,7 +206,7 @@ cle_svsrc <-
 
 
 
-#' Generate data frame for X model
+#' Generate data frame for multiple modes
 #'
 #'	@param barge List of parameters and data generated using parameter_barge()
 #'	@param cores Number of cores to use. Defaults to 1. if More than one are used, furrr::feautre_pmap is used.

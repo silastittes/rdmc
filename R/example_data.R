@@ -5,7 +5,6 @@
 #'
 #' @keywords datasets
 #'
-#' @export
 
 #' Example data
 #' @docType data
@@ -21,5 +20,4 @@
 #' @usage data(selectedRegionAlleleFreqs_example)
 #'
 #' @keywords datasets
-#' @export
 #'
