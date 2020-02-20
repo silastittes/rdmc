@@ -6,6 +6,8 @@
 cle_neutral <-
   function(barge){
 
+    cmodes <- "neutral"
+
     grid_df <- expand_grid(
       selSite = barge$selSite,
       barge$neut_par)
@@ -14,10 +16,10 @@ cle_neutral <-
     neutral_cle <-
       pmap_dfr(grid_df, function(selSite, site_idx, idx){
         cle <- calcCompLikelihood_par(site_idx, barge$det_FOmegas_neutral,  barge$inv_FOmegas_neutral, barge, neutral = TRUE)
-        tibble(selSite, cle, locus = barge$locus_name, model = "neutral")
+        tibble(selSite, cle, locus = barge$locus_name, sel_pops = as.character(NA), model = )
       })
 
-    neutral_cle <- mutate(neutral_cle, sels = as.numeric(NA), gs = as.numeric(NA), times = as.numeric(NA), migs = as.numeric(NA), sources = as.numeric(NA))
+    neutral_cle <- mutate(neutral_cle, sels = as.numeric(NA), gs = as.numeric(NA), times = as.numeric(NA), migs = as.numeric(NA), sources = as.numeric(NA), sel_pops = as.character(NA), model = as.character(NA))
     return(neutral_cle)
   }
 
@@ -30,6 +32,10 @@ cle_neutral <-
 
 cle_ind <-
   function(barge, cores = 1){
+
+    cmodes <- "independent"
+    cpops <- paste0(barge$selPops, collapse = "-")
+
     ind_df <-
       do(group_by(barge$ind_par, idx), {
         FOmegas_ind <- calcFOmegas_indSweeps(.$sels, barge)
@@ -52,13 +58,13 @@ cle_ind <-
       ind_cle <-
         future_pmap_dfr(grid_df, function(selSite, site_idx, sels, idx){
           cle <- calcCompLikelihood_par(site_idx, ind_df$det[[idx]], ind_df$inv[[idx]], barge)
-          tibble(selSite, sels, cle, locus = barge$locus_name, model = "independent")
+          tibble(selSite, sels, cle, locus = barge$locus_name, sel_pops = cpops, model = cmodes)
         })
     } else{
       ind_cle <-
         pmap_dfr(grid_df, function(selSite, site_idx, sels, idx){
           cle <- calcCompLikelihood_par(site_idx, ind_df$det[[idx]], ind_df$inv[[idx]], barge)
-          tibble(selSite, sels, cle, locus = barge$locus_name, model = "independent")
+          tibble(selSite, sels, cle, locus = barge$locus_name, sel_pops = cpops, model = cmodes)
         })
     }
 
@@ -74,6 +80,9 @@ cle_ind <-
 
 cle_mig <-
   function(barge, cores = 1){
+
+    cmodes <- "migration"
+    cpops <- paste0(barge$selPops, collapse = "-")
 
     mig_df <-
       do(group_by(barge$mig_par, idx), {
@@ -97,13 +106,13 @@ cle_mig <-
       mig_cle <-
         future_pmap_dfr(grid_df, function(selSite, idx, site_idx, sels, migs, sources){
           cle <- calcCompLikelihood_par(site_idx, mig_df$det[[idx]], mig_df$inv[[idx]], barge)
-          tibble(selSite, sels, migs, sources, cle, locus = barge$locus_name, model = "migration")
+          tibble(selSite, sels, migs, sources, cle, locus = barge$locus_name, sel_pops = cpops, model = cmodes)
         })
     } else {
       mig_cle <-
         pmap_dfr(grid_df, function(selSite, idx, site_idx, sels, migs, sources){
           cle <- calcCompLikelihood_par(site_idx, mig_df$det[[idx]], mig_df$inv[[idx]], barge)
-          tibble(selSite, sels, migs, sources, cle, locus = barge$locus_name, model = "migration")
+          tibble(selSite, sels, migs, sources, cle, locus = barge$locus_name, sel_pops = cpops, model = cmodes)
         })
     }
 
@@ -120,6 +129,9 @@ cle_mig <-
 
 cle_sv <-
   function(barge, cores = 1){
+
+    cmodes <- "sv"
+    cpops <- paste0(barge$selPops, collapse = "-")
 
     sv_df <-
       do(group_by(barge$sv_par, idx), {
@@ -143,13 +155,13 @@ cle_sv <-
       sv_cle <-
         future_pmap_dfr(grid_df, function(selSite, idx, site_idx, sels, gs, times){
           cle <- calcCompLikelihood_par(site_idx, sv_df$det[[idx]], sv_df$inv[[idx]], barge)
-          tibble(selSite, sels, gs, times, cle, locus = barge$locus_name, model = "standing_variant")
+          tibble(selSite, sels, gs, times, cle, locus = barge$locus_name, sel_pops = cpops, model = cmodes)
         })
     } else {
       sv_cle <-
         pmap_dfr(grid_df, function(selSite, idx, site_idx, sels, gs, times){
           cle <- calcCompLikelihood_par(site_idx, sv_df$det[[idx]], sv_df$inv[[idx]], barge)
-          tibble(selSite, sels, gs, times, cle, locus = barge$locus_name, model = "standing_variant")
+          tibble(selSite, sels, gs, times, cle, locus = barge$locus_name, sel_pops = cpops, model = cmodes)
         })
     }
 
@@ -166,6 +178,10 @@ cle_sv <-
 
 cle_svsrc <-
   function(barge, cores = 1){
+
+    cmodes <- "svsrc"
+    cpops <- paste0(barge$selPops, collapse = "-")
+
 
     sv_df <-
       do(group_by(barge$svsrc_par, idx), {
@@ -190,14 +206,14 @@ cle_svsrc <-
         future_pmap_dfr(grid_df , function(idx, site_idx,
                                            selSite, sels, gs, times, sources){
           cle <- calcCompLikelihood_par(site_idx, sv_df$det[[idx]], sv_df$inv[[idx]], barge)
-          tibble(selSite, sels, gs, times, sources, cle, locus = barge$locus_name, model = "standing_source")
+          tibble(selSite, sels, gs, times, sources, cle, locus = barge$locus_name, sel_pops = cpops, model = cmodes)
         })
     } else {
       svsrc_cle <-
         pmap_dfr(grid_df, function(idx, site_idx,
                                    selSite, sels, gs, times, sources){
           cle <- calcCompLikelihood_par(site_idx, sv_df$det[[idx]], sv_df$inv[[idx]], barge)
-          tibble(selSite, sels, gs, times, sources, cle, locus = barge$locus_name, model = "standing_source")
+          tibble(selSite, sels, gs, times, sources, cle, locus = barge$locus_name, sel_pops = cpops, model = cmodes)
         })
     }
     svsrc_cle <- mutate(svsrc_cle, migs = as.numeric(NA))
@@ -214,6 +230,9 @@ cle_svsrc <-
 
 cle_multi <-
   function(barge, cores = 1){
+
+    cmodes <- paste0(rep(barge$modes, map_dbl(barge$sets, length)), collapse = "-")
+    cpops <- paste0(map_chr(barge$sets, paste, collapse = "_"), collapse = "-")
 
     multi_df <-
       do(group_by(barge$multi_par, idx), {
@@ -238,14 +257,14 @@ cle_multi <-
         future_pmap_dfr(grid_df , function(idx, site_idx,
                                            selSite, sels, gs, times, migs, sources){
           cle <- calcCompLikelihood_par(site_idx, multi_df$det[[idx]], multi_df$inv[[idx]], barge)
-          tibble(selSite, sels, gs, times, migs, sources, cle, locus = barge$locus_name, model = "mixed")
+          tibble(selSite, sels, gs, times, migs, sources, cle, locus = barge$locus_name, sel_pops = cpops, model = cmodes)
         })
     } else {
       multi_cle <-
         pmap_dfr(grid_df , function(idx, site_idx,
                                     selSite, sels, gs, times, migs, sources){
           cle <- calcCompLikelihood_par(site_idx, multi_df$det[[idx]], multi_df$inv[[idx]], barge)
-          tibble(selSite, sels, gs, times, migs, sources, cle, locus = barge$locus_name, model = "mixed")
+          tibble(selSite, sels, gs, times, migs, sources, cle, locus = barge$locus_name, sel_pops = cpops, model = cmodes)
         })
     }
     return(multi_cle)

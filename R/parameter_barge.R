@@ -92,7 +92,7 @@ parameter_barge <-
       mutate(distinct(dplyr::select(full_par,-migs)), idx = 1:n())
 
     if (!missing(modes)) {
-      modes_s <- sort(modes)
+      modes_s <- unique(sort(modes))
       multi_par <-
         ifelse(
           identical(modes_s, c("ind", "sv")),
