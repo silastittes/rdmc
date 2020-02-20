@@ -1,0 +1,14 @@
+Package: dmc
+Title: Distinguishing Among Modes of Convergent Adaptation Using Population Genomic Data
+Version: 0.0.0.9000
+Authors@R: 
+    person(given = "First",
+           family = "Last",
+           role = c("aut", "cre"),
+           email = "first.last@example.com",
+           comment = c(ORCID = "YOUR-ORCID-ID"))
+Description: Estimates composite likelihood models developed by Lee and Coop (2017) to infer the modes of convergent adaptation using allele frequency data from multuple populations.
+Depends: R (>= 3.4.0), MASS, dplyr, tidyr, purrr, furrr, magrittr
+License: GPL (>=3)
+Encoding: UTF-8
+LazyData: true
