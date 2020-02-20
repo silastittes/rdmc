@@ -26,8 +26,7 @@ parameter_barge(
 )
 }
 \arguments{
-\item{allFreqs}{Matrix of allele frequencies at putatively neutral sites with
-dimension numberOfPopulations x numberOfSites}
+\item{allFreqs}{Matrix of allele frequencies at putatively neutral sites with dimension numberOfPopulations x numberOfSites}
 
 \item{selPops}{Vector of indices for populations that were hypothesized to have experienced selection.}
 
@@ -35,8 +34,7 @@ dimension numberOfPopulations x numberOfSites}
 
 \item{n_sites}{Integer for the number of sites to propose as the selected site. Must be less than length(positions).}
 
-\item{sampleSizes}{Vector of sample sizes of length numberOfPopulations.
-(i.e. twice the number of diploid individuals sampled in each population)}
+\item{sampleSizes}{Vector of sample sizes of length numberOfPopulations. (i.e. twice the number of diploid individuals sampled in each population)}
 
 \item{numPops}{Number of populations sampled (both selected and non-selected)}
 
@@ -61,8 +59,7 @@ dimension numberOfPopulations x numberOfSites}
 
 \item{locus_name}{String to name the locus. Helpful if multiple loci will be combined in subsequent analyses. Defaults to "locus"}
 
-\item{freqs_notRand}{Matrix of allele frequencies at putatively selected sites with
-dimension numberOfPopulations x numberOfSites}
+\item{freqs_notRand}{Matrix of allele frequencies at putatively selected sites with dimension numberOfPopulations x numberOfSites}
 
 \item{numBins:}{the number of bins in which to bin alleles a given distance from the proposed selected sites}
 }
