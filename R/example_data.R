@@ -5,12 +5,7 @@
 #'
 #' @keywords datasets
 #'
-#' @references Lee and Coop et al. (201X) Genetics
-#' (\href{x}{PubMed})
-#'
-#' @source \href{x}{x}
-#'
-"neutralAlleleFreqs_example"
+#' @export
 
 #' Example data
 #' @docType data
@@ -18,13 +13,6 @@
 #' @usage data(selectedRegionPositions_example)
 #'
 #' @keywords datasets
-#'
-#' @references Lee and Coop et al. (201X) Genetics
-#' (\href{x}{PubMed})
-#'
-#' @source \href{x}{x}
-#'
-"selectedRegionPositions_example"
 
 
 #' Example data
@@ -33,10 +21,5 @@
 #' @usage data(selectedRegionAlleleFreqs_example)
 #'
 #' @keywords datasets
+#' @export
 #'
-#' @references Lee and Coop et al. (201X) Genetics
-#' (\href{x}{PubMed})
-#'
-#' @source \href{x}{x}
-#'
-"selectedRegionAlleleFreqs_example"
