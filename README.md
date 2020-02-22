@@ -1,37 +1,88 @@
 # dmc
-## Distinguishing among modes of convergent adaptation using population genomic data
+## Distinguishing among modes of convergent adaptation using population genomic data -- R package
 
-This repository contains code associated with Lee and Coop (2017) and for extension [myAdIDAS](https://github.com/kristinmlee/dmc#4-myadidas-extension). 
+This is the source code page for an R package implementing methods presented in Lee and Coop (2017). [See this page for Kristin Lee's original code and exentions](https://github.com/kristinmlee/dmc/)
 
-### 1. Scripts to run DMC
-+ A fully worked example for how to use DMC can be found at [dmc_example.md](https://github.com/kristinmlee/dmc/blob/master/dmc_example.md)
+There are only minimal changes to the original code, and no changes were made to the mathematical underpinnings.
+
+The code below is a reimplementation of [Kristin Lee's original DMC example.](https://github.com/kristinmlee/dmc/blob/master/dmc_example.md).
+
+If this package is used, please cite Lee and Coop (2017).
+
+```
+devtools::install_github(repo = "RILAB/rDMC")
+library(MASS)
+library(tidyverse)
+library(furrr)
+library(dmc)
+
+data(neutralAlleleFreqs_example)
+data(selectedRegionPositions_example)
+data(selectedRegionAlleleFreqs_example)
+
+#specify parameters and input data.
+barge <- 
+  parameter_barge(
+    Ne =  10000,
+    rec = 0.005,
+    allFreqs = allFreqs,  
+    freq_notRand = freq_notRand, 
+    selPops = c(1, 3, 5),
+    positions = positions,
+    sets = list(c(1, 3), 5),
+    modes = c("sv", "ind"),
+    n_sites = 10,
+    sampleSizes = rep(10, 6),
+    numPops = 6,
+    numBins = 1000,
+    sels = c(1e-4, 1e-3, 0.01, seq(0.02, 0.14, by = 0.01), seq(0.15, 0.3, by = 0.05), 
+             seq(0.4, 0.6, by = 0.1)),
+    times = c(0, 5, 25, 50, 100, 500, 1000, 1e4, 1e6),
+    gs = c(1/(2*10000), 10^-(4:1)),
+    migs = c(10^-(seq(5, 1, by = -2)), 0.5, 1),
+    sources = selPops, 
+    locus_name = "chow"
+  )
+
+#composite likelihood estimates for each model. Multiple cores will not be used if running code in Rstudio.
+neut_cle <- cle_neutral(barge)
+ind_cle <- cle_ind(barge, cores = 1)
+mig_cle <- cle_mig(barge, cores = 1)
+sv_cle <- cle_svsrc(barge, cores = 1)
+multi_cle <- cle_multi(barge, cores = 1)
+
+#combine all data sets
+mergeby <- names(neut_cle)
+all_mods <- 
+  full_join(mig_cle, ind_cle, by = mergeby) %>%
+  full_join(., multi_cle, by = mergeby) %>% 
+  full_join(., sv_cle, by = mergeby)
 
 
-+ Short descriptions of the scripts needed to run DMC found in this repository.
+#get max comp likelihood parameters estimates for all models
+all_mods %>% 
+  group_by(model) %>% 
+  filter(cle == max(cle))
 
-	See individual files for more details and example for their usage in context.
+#visualize comp likelihoods by position relative to neutral sites
+neut <- neut_cle$cle[1]
 
-
-	+ [calcNeutralF.R](https://github.com/kristinmlee/dmc/blob/master/calcNeutralF.R) contains code to generate and save **F** as an R object.
-
-	+ [genSelMatrices_individualModes.R](https://github.com/kristinmlee/dmc/blob/master/genSelMatrices_individualModes.R) contains functions to generate **F<sup>(S)</sup>** for single modes of convergent adaptation.
-
-	+ [genSelMatrices_multipleModes.R](https://github.com/kristinmlee/dmc/blob/master/genSelMatrices_multipleModes.R) contains functions to generate **F<sup>(S)</sup>** for multiple modes of convergence.
-
-	+ [calcInvDetSelMatrices_all.R](https://github.com/kristinmlee/dmc/blob/master/calcInvDetSelMatrices_all.R) contains scripts to generate all the possible inverses and determinants.
-
-	+ [calcCompositeLike.R](https://github.com/kristinmlee/dmc/blob/master/calcCompositeLike.R) contains functions for calculating the composite log-likelihoods for all models.
-
-	+ [getMCLE.R](https://github.com/kristinmlee/dmc/blob/master/getMCLE.R) contains functions to get the maximum composite likelihood estimates of parameters for all convergence models.
-
-
-### 2. Scripts associated with the [*Mimulus*](https://github.com/kristinmlee/dmc/tree/master/mimulusAnalysis) and [killifish](https://github.com/kristinmlee/dmc/tree/master/killifishAnalysis) analyses in Lee and Coop (2017)
-
-### 3. [Modified version of mssel](https://github.com/kristinmlee/dmc/tree/master/mssel_modified), a version of ms [1] that allows for the incorporation of selection at a single site, modified by KL to allow for multiple independent origins of beneficial lineages.
-
-### 4. [MYAdIDAS extension](https://github.com/kristinmlee/dmc/tree/master/myAdidas)
-+ Code for extension MYAdIDAS by Sivan Yair and Kristin Lee, associated with Oziolor et al. (2019) and modified for cases of adaptive introgression, can be found in folder [myAdidas](https://github.com/kristinmlee/dmc/tree/master/myAdidas). This also includes modifications for deletions, strong selection coefficients, and differences in effective population sizes among populations. See folder for complete details.
+all_mods %>% 
+  group_by(selSite, model) %>% 
+  summarise(mcle = max(cle) - neut) %>% 
+  ggplot(aes(selSite, mcle, colour = model)) +
+  geom_line() +
+  geom_point() +
+  theme_bw()
 
 
-[1] Hudson, R. R. (2002). Generating samples under a Wright–Fisher neutral model of genetic variation. Bioinformatics 18, 337–338.
+#visualize likelihood surface wrt selection coefficients
+all_mods %>% 
+  group_by(sels, model) %>% 
+  summarise(mcle = max(cle) - neut) %>% 
+  ggplot(aes(sels, mcle, colour = model)) +
+  geom_line() +
+  geom_point() +
+  theme_bw()
 
+```
