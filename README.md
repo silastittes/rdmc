@@ -3,11 +3,11 @@
 
 This is the source code page for an R package implementing methods presented in Lee and Coop (2017). [See this page for Kristin Lee's original code and exentions](https://github.com/kristinmlee/dmc/)
 
-There are only minimal changes to the original code, and no changes were made to the mathematical underpinnings.
+There are only minimal changes to the original code, and no changes were made to the mathematical underpinnings. Assume mistakes are caused by me and not Lee and Coop, and please do report issues to this page.  
 
 The code below is a reimplementation of [Kristin Lee's original DMC example.](https://github.com/kristinmlee/dmc/blob/master/dmc_example.md).
 
-If this package is used, please cite Lee and Coop (2017).
+If this package is used, please cite Lee and Coop (2017), and share the link this page (maybe?). 
 
 ```
 devtools::install_github(repo = "RILAB/rDMC")
