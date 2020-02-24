@@ -59,10 +59,10 @@ parameter_barge <-
     diag(my.means.rand) = diag(my.means.rand) * sampleSizes / (sampleSizes - 1) - rowMeans(allRunFreq) /
       (sampleSizes - 1)
 
-    dist.ij = which(my.means.rand == min(my.means.rand), arr.ind = TRUE)[1,]
+    dist.ij = which(my.means.rand == min(my.means.rand), arr.ind = TRUE)[1, ]
 
-    A.rand = mean(allRunFreq[dist.ij[1],] * allRunFreq[dist.ij[2],])
-    C.rand = mean(allRunFreq[dist.ij[1],] * (1 - allRunFreq[dist.ij[2],]))
+    A.rand = mean(allRunFreq[dist.ij[1], ] * allRunFreq[dist.ij[2], ])
+    C.rand = mean(allRunFreq[dist.ij[1], ] * (1 - allRunFreq[dist.ij[2], ]))
 
     F_estimate = (my.means.rand - A.rand) / C.rand
 
@@ -83,13 +83,13 @@ parameter_barge <-
     ind_par <-
       mutate(distinct(dplyr::select(full_par, sels)), idx = 1:n())
     neut_par <-
-      mutate(distinct(dplyr::select(ind_par,-sels)), idx = 1:n())
+      mutate(distinct(dplyr::select(ind_par, -sels)), idx = 1:n())
     mig_par <-
-      mutate(distinct(dplyr::select(full_par,-c(times, gs))), idx = 1:n())
+      mutate(distinct(dplyr::select(full_par, -c(times, gs))), idx = 1:n())
     sv_par <-
-      mutate(distinct(dplyr::select(full_par,-migs,-sources)), idx = 1:n())
+      mutate(distinct(dplyr::select(full_par, -migs, -sources)), idx = 1:n())
     svsrc_par <-
-      mutate(distinct(dplyr::select(full_par,-migs)), idx = 1:n())
+      mutate(distinct(dplyr::select(full_par, -migs)), idx = 1:n())
 
     if (!missing(modes)) {
       modes_s <- unique(sort(modes))
@@ -176,7 +176,7 @@ parameter_barge <-
     freqs = t(freqs)
     epsilons = rowMeans(freqs)
     freqs_MC = sapply(1:nrow(freqs), function(i)
-      Tmatrix %*% freqs[i, ])
+      Tmatrix %*% freqs[i,])
 
     #MVN parameters
     k = numPops - 1
@@ -228,4 +228,66 @@ parameter_barge <-
       )
 
     return(barge_list)
+  }
+
+
+
+
+#' Update an existing parameter barge with a new mode details.
+#'
+#'
+#' @param barge An existing list object made by calling the parameter_barge() function.
+#' @param sets  List of length number of different modes of convergence to be specified vector "modes" where each element in list contains vector of populations with a given single mode of convergence i.e. if populations 2 and 6 share a mode and populations 3 has another, sets = list(c(2,6), 3).
+#' @param modes Character vector of length sets defining a new set of mixed modes for each set of selected populations ("ind", "sv", and/or "mig"). Other variables will be updated accordingly
+#' @export
+
+update_mode <-
+  function(barge, sets, modes) {
+    sels <- barge$sels
+    gs <- barge$gs
+    migs <- barge$migs
+    times <- barge$times
+    sources <- barge$sources
+    #grids of parameter combinations to search over for each of the three main models. more to come?
+    full_par <- expand_grid(sels, gs, times, migs, sources)
+
+    ind_par <-
+      mutate(distinct(dplyr::select(full_par, sels)), idx = 1:n())
+    neut_par <-
+      mutate(distinct(dplyr::select(ind_par, -sels)), idx = 1:n())
+    mig_par <-
+      mutate(distinct(dplyr::select(full_par, -c(times, gs))), idx = 1:n())
+    sv_par <-
+      mutate(distinct(dplyr::select(full_par, -migs, -sources)), idx = 1:n())
+    svsrc_par <-
+      mutate(distinct(dplyr::select(full_par, -migs)), idx = 1:n())
+
+    modes_s <- unique(sort(modes))
+    multi_par <-
+      ifelse(
+        identical(modes_s, c("ind", "sv")),
+        tibble(expand_grid(sels, gs, times, migs = migs[1], sources)),
+        ifelse(
+          identical(modes_s, c("ind", "mig")),
+          tibble(expand_grid(
+            sels, gs = gs[1], times = times[1], migs, sources
+          )),
+          ifelse(
+            identical(modes_s, c("mig", "sv")),
+            tibble(expand_grid(sels, gs, times, migs, sources)),
+            ifelse(identical(modes_s, c("ind", "sv", "mig")),
+                   tibble(
+                     expand_grid(sels, gs, times, migs, sources)
+                   ),
+                   NA)
+          )
+        )
+      )[[1]]
+    #multi_par <- expand_grid(sels, gs, times, migs, sources)
+    multi_par <- mutate(multi_par, idx = 1:n())
+
+    barge$modes <- modes
+    barge$multi_par <- multi_par
+
+    return(barge)
   }
