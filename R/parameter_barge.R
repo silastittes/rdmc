@@ -195,6 +195,7 @@ parameter_barge <-
         numBins = numBins,
         n_sites = n_sites,
         selPops = selPops,
+        sources = sources,
         sets = sets,
         modes = modes,
         Ne = Ne,
