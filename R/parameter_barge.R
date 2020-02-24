@@ -287,6 +287,7 @@ update_mode <-
     #multi_par <- expand_grid(sels, gs, times, migs, sources)
     multi_par <- mutate(multi_par, idx = 1:n())
 
+    barge$sets <- sets
     barge$modes <- modes
     barge$multi_par <- multi_par
 
