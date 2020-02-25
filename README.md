@@ -15,7 +15,7 @@ If this package is used, please cite Lee and Coop (2017), and share the link thi
 
 ```
 
-devtools::install_github(repo = "RILAB/rDMC", auth_token = "a26f985fb8f0500b5b1aa879d178ae562e69a4be")
+devtools::install_github(repo = "RILAB/rDMC")
 library(dmc)
 library(ggplot2)
 
