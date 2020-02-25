@@ -1,17 +1,17 @@
 # dmc
-## Distinguishing among modes of convergent adaptation using population genomic data -- R package
+## R package for Distinguishing among modes of convergent adaptation using population genomic data.
 
 NOTE: This package is a work in progress, especially the documentation. All effort will be made to keep updates backwards compatible, but there are no guarantees.
 
 This is the source code page for an R package implementing methods presented in Lee and Coop (2017). [See this page for Kristin Lee's original code and exentions](https://github.com/kristinmlee/dmc/)
 
-There are only minimal changes to the original code, and no changes were made to the mathematical underpinnings. Assume mistakes are caused by me and not Lee and Coop, and please do report issues to this page.  
+There are only minimal changes to the original code, and no changes were made to the mathematical underpinnings. Assume mistakes are caused by Silas Tittes and not by Kristin Lee or Graham Coop, and please do report issues to this page.
 
 The code below is a reimplementation of [Kristin Lee's original DMC example.](https://github.com/kristinmlee/dmc/blob/master/dmc_example.md).
 
-If this package is used, please cite Lee and Coop (2017), and share the link this page (maybe?). 
+If this package is used, *please* cite Lee and Coop (2017), and share a link this page (you know, if you feel like it).
 
-## Demo
+## Usage
 
 ```
 
