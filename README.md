@@ -1,7 +1,7 @@
 # dmc
 ## Distinguishing among modes of convergent adaptation using population genomic data -- R package
 
-NOTE: This package is very much a work in progress, especially the documentation. All effort will be made to keep updates backwards compatible, but there are no guarantees.
+NOTE: This package is a work in progress, especially the documentation. All effort will be made to keep updates backwards compatible, but there are no guarantees.
 
 This is the source code page for an R package implementing methods presented in Lee and Coop (2017). [See this page for Kristin Lee's original code and exentions](https://github.com/kristinmlee/dmc/)
 
@@ -11,13 +11,15 @@ The code below is a reimplementation of [Kristin Lee's original DMC example.](ht
 
 If this package is used, please cite Lee and Coop (2017), and share the link this page (maybe?). 
 
-```
-devtools::install_github(repo = "RILAB/rDMC")
-library(MASS)
-library(tidyverse)
-library(furrr)
-library(dmc)
+## Demo
 
+```
+
+devtools::install_github(repo = "RILAB/rDMC", auth_token = "a26f985fb8f0500b5b1aa879d178ae562e69a4be")
+library(dmc)
+library(ggplot2)
+
+#load example data
 data(neutralAlleleFreqs_example)
 data(selectedRegionPositions_example)
 data(selectedRegionAlleleFreqs_example)
@@ -31,8 +33,6 @@ barge <-
     freq_notRand = freq_notRand, 
     selPops = c(1, 3, 5),
     positions = positions,
-    sets = list(c(1, 3), 5),
-    modes = c("sv", "ind"),
     n_sites = 10,
     sampleSizes = rep(10, 6),
     numPops = 6,
@@ -46,25 +46,36 @@ barge <-
     locus_name = "chow"
   )
 
-#composite likelihood estimates for each model. Multiple cores will not be used if running code in Rstudio.
+#composite likelihood estimates for each model. note: multi core will no work in RStudio
 neut_cle <- cle_neutral(barge)
-ind_cle <- cle_ind(barge, cores = 1)
-mig_cle <- cle_mig(barge, cores = 1)
-sv_cle <- cle_svsrc(barge, cores = 1)
-multi_cle <- cle_multi(barge, cores = 1)
+ind_cle <- cle_ind(barge, cores = 6)
+mig_cle <- cle_mig(barge, cores = 6)
+sv_cle <- cle_svsrc(barge, cores = 6)
+
+#update the parameter list to fit a model with mixed modes
+barge <- update_mode(barge = barge, sets = list(c(1, 3), 5), modes = c("sv", "ind"))
+multi_svind <- cle_multi(barge, cores = 6)
+
+#update the parameter list again to fit a different mixed mode model
+barge <- update_mode(barge = barge, sets = barge$sets, modes =  c("mig", "ind"))
+multi_migind <- cle_multi(barge, cores = 6)
+
 
 #combine all data sets
 mergeby <- names(neut_cle)
 all_mods <- 
   full_join(mig_cle, ind_cle, by = mergeby) %>%
-  full_join(., multi_cle, by = mergeby) %>% 
-  full_join(., sv_cle, by = mergeby)
+  full_join(., sv_cle, by = mergeby) %>% 
+  #full_join(., multi_svind, by = mergeby) %>% 
+  full_join(., multi_migind, by = mergeby)
+
 
 
 #get max comp likelihood parameters estimates for all models
 all_mods %>% 
   group_by(model) %>% 
   filter(cle == max(cle))
+
 
 #visualize comp likelihoods by position relative to neutral sites
 neut <- neut_cle$cle[1]
