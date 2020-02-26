@@ -23,7 +23,7 @@
 
 parameter_barge <-
   function(allFreqs,
-           freq_notRand,
+           freqs_notRand,
            selPops,
            positions,
            n_sites,
