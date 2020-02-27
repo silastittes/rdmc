@@ -187,7 +187,7 @@ parameter_barge <-
       list(
         locus_name = locus_name,
         allFreqs = allFreqs,
-        freqs_notRand = freqs_notRand,
+        # freqs_notRand = freqs_notRand,
         positions = positions,
         sampleSizes = sampleSizes,
         selSite = selSite,
