@@ -5,11 +5,11 @@ NOTE: This package is a work in progress, especially the documentation. All effo
 
 This is the source code page for an R package implementing methods presented in Lee and Coop (2017). [See this page for Kristin Lee's original code and exentions](https://github.com/kristinmlee/rdmc/)
 
-There are only minimal changes to the original code, and no changes were made to the mathematical underpinnings. Assume mistakes are caused by Silas Tittes and not by Kristin Lee or Graham Coop, and please do report issues to this page.
+While there is a good amount of additions, there are only minimal changes to the original code, and no changes were made to the mathematical underpinnings. Assume mistakes are caused by Silas Tittes and not by Kristin Lee or Graham Coop, and please do report issues to this page.
 
-The code below is a reimplementation of [Kristin Lee's original DMC example.](https://github.com/kristinmlee/rdmc/blob/master/dmc_example.md).
+The code below is a reimplementation of [Kristin Lee's original DMC example.](https://github.com/kristinmlee/rdmc/blob/master/dmc_example.md), using the same example data.
 
-If this package is used, *please* cite Lee and Coop (2017), and share a link this page (you know, if you feel like it).
+If this package is used, *please* cite Lee and Coop (2017), and share a link this page. A preprint should be available to cite the r package in the near future. 
 
 ## Usage
 
