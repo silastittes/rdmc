@@ -30,7 +30,7 @@ barge <-
     Ne =  10000,
     rec = 0.005,
     allFreqs = allFreqs,  
-    freq_notRand = freq_notRand, 
+    freqs_notRand = freqs_notRand, 
     selPops = c(1, 3, 5),
     positions = positions,
     n_sites = 10,
