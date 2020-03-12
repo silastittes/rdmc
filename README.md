@@ -1,13 +1,13 @@
-# dmc
+# rdmc
 ## R package for Distinguishing among modes of convergent adaptation using population genomic data.
 
 NOTE: This package is a work in progress, especially the documentation. All effort will be made to keep updates backwards compatible, but there are no guarantees.
 
-This is the source code page for an R package implementing methods presented in Lee and Coop (2017). [See this page for Kristin Lee's original code and exentions](https://github.com/kristinmlee/dmc/)
+This is the source code page for an R package implementing methods presented in Lee and Coop (2017). [See this page for Kristin Lee's original code and exentions](https://github.com/kristinmlee/rdmc/)
 
 There are only minimal changes to the original code, and no changes were made to the mathematical underpinnings. Assume mistakes are caused by Silas Tittes and not by Kristin Lee or Graham Coop, and please do report issues to this page.
 
-The code below is a reimplementation of [Kristin Lee's original DMC example.](https://github.com/kristinmlee/dmc/blob/master/dmc_example.md).
+The code below is a reimplementation of [Kristin Lee's original DMC example.](https://github.com/kristinmlee/rdmc/blob/master/dmc_example.md).
 
 If this package is used, *please* cite Lee and Coop (2017), and share a link this page (you know, if you feel like it).
 
@@ -15,8 +15,8 @@ If this package is used, *please* cite Lee and Coop (2017), and share a link thi
 
 ```
 
-devtools::install_github(repo = "RILAB/dmc")
-library(dmc)
+devtools::install_github(repo = "RILAB/rdmc")
+library(rdmc)
 library(ggplot2)
 
 #load example data

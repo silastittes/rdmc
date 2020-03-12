@@ -1,4 +1,4 @@
-Package: dmc
+Package: rdmc
 Title: Distinguishing Among Modes of Convergent Adaptation Using Population Genomic Data
 Version: 0.0.0.9000
 Authors@R: 
