@@ -19,8 +19,17 @@ cle_neutral <-
         tibble(selSite, cle, locus = barge$locus_name)
       })
 
-    neutral_cle <- mutate(neutral_cle, sels = as.numeric(NA), gs = as.numeric(NA), times = as.numeric(NA), migs = as.numeric(NA),
-                          sources = as.numeric(NA), sel_pops = as.character(NA), model = as.character(NA), sel_pops = as.character(NA), model = cmodes)
+    neutral_cle <- mutate(
+      neutral_cle,
+      sels = as.numeric(NA),
+      gs = as.numeric(NA),
+      times = as.numeric(NA),
+      migs = as.numeric(NA),
+      sources = as.numeric(NA),
+      sel_pops = as.character(NA),
+      model = as.character(NA),
+      model = cmodes
+    )
     return(neutral_cle)
   }
 
@@ -269,6 +278,17 @@ cle_multi <-
           tibble(selSite, sels, gs, times, migs, sources, cle, locus = barge$locus_name, sel_pops = cpops, model = cmodes)
         })
     }
+    multi_cle <- mutate(multi_cle,
+                        sels = as.numeric(sels),
+                        gs = as.numeric(gs),
+                        times = as.numeric(times),
+                        migs = as.numeric(migs),
+                        sources = as.numeric(sources),
+                        sel_pops = as.character(sel_pops),
+                        model = as.character(model),
+                        sel_pops = as.character(sel_pops),
+                        model = cmodes)
+
     return(multi_cle)
   }
 
