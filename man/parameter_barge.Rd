@@ -40,6 +40,8 @@ parameter_barge(
 
 \item{numPops}{Number of populations sampled (both selected and non-selected)}
 
+\item{numBins}{the number of bins in which to bin alleles a given distance from the proposed selected sites}
+
 \item{sets}{List of length number of different modes of convergence to be specified vector "modes" where each element in list contains vector of populations with a given single mode of convergence i.e. if populations 2 and 6 share a mode and populations 3 has another, sets = list(c(2,6), 3). Required for modeling multiple modes.}
 
 \item{modes}{Character vector of length sets defining mode for each set of selected populations ("ind", "sv", and/or "mig")}
@@ -59,8 +61,6 @@ parameter_barge(
 \item{rec}{Per base recombination rate for putatively selected region.}
 
 \item{locus_name}{String to name the locus. Helpful if multiple loci will be combined in subsequent analyses. Defaults to "locus"}
-
-\item{numBins:}{the number of bins in which to bin alleles a given distance from the proposed selected sites}
 }
 \description{
 Generate and transfer parameters, quantities, and objects used in a variety of downstream steps to Global environment.
