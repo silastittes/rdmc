@@ -17,8 +17,8 @@
 #' @param Ne Effective population size (Assumed equal for all populations).
 #' @param rec Per base recombination rate for putatively selected region.
 #' @param locus_name String to name the locus. Helpful if multiple loci will be combined in subsequent analyses. Defaults to "locus"
-#' @param sets  List of length number of different modes of convergence to be specified vector "modes" where each element in list contains vector of populations with a given single mode of convergence i.e. if populations 2 and 6 share a mode and populations 3 has another, sets = list(c(2,6), 3). Required for modeling multiple modes.
-#' @param modes Character vector of length sets defining mode for each set of selected populations ("ind", "sv", and/or "mig")
+#' @param sets  List of length number of different modes of convergence to be specified vector "modes" where each element in list contains vector of populations with a given single mode of convergence i.e. if populations 2 and 6 share a mode and populations 3 has another, sets = list(c(2,6), 3). Required for modeling multiple modes. Only required for fitting mixed mode models.
+#' @param modes Character vector of length sets defining mode for each set of selected populations ("ind", "sv", and/or "mig"). Only required for fitting mixed mode models.
 #' @export
 
 parameter_barge <-
