@@ -60,7 +60,7 @@ parameter_barge(
 
 \item{rec}{Per base recombination rate for putatively selected region.}
 
-\item{locus_name}{String to name the locus. Helpful if multiple loci will be combined in subsequent analyses. Defaults to "locus"}
+\item{locus_name}{String to name the locus. Helpful if multiple loci will be combined in subsequent analyses. Defaults to "locus".}
 }
 \description{
 Generate and transfer parameters, quantities, and objects used in a variety of downstream steps to Global environment.
