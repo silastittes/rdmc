@@ -55,7 +55,7 @@ cle_ind <-
     grid_df <- mutate(grid_df, site_idx = group_indices(grid_df, selSite))
 
     if(cores > 1){
-      plan(multicore, workers = cores)
+      plan(multisession, workers = cores)
       ind_cle <-
         future_pmap_dfr(grid_df, function(selSite, site_idx, sels, idx){
           cle <- calcCompLikelihood_par(site_idx, ind_df$det[[idx]], ind_df$inv[[idx]], barge)
@@ -104,7 +104,7 @@ cle_mig <-
     grid_df <- mutate(grid_df , site_idx = group_indices(grid_df, selSite))
 
     if(cores > 1){
-      plan(multicore, workers = cores)
+      plan(multisession, workers = cores)
       mig_cle <-
         future_pmap_dfr(grid_df, function(selSite, idx, site_idx, sels, migs, sources){
           cle <- calcCompLikelihood_par(site_idx, mig_df$det[[idx]], mig_df$inv[[idx]], barge)
@@ -153,7 +153,7 @@ cle_sv <-
     grid_df <- mutate(grid_df , site_idx = group_indices(grid_df, selSite))
 
     if(cores > 1){
-      plan(multicore, workers = cores)
+      plan(multisession, workers = cores)
       sv_cle <-
         future_pmap_dfr(grid_df, function(selSite, idx, site_idx, sels, gs, times){
           cle <- calcCompLikelihood_par(site_idx, sv_df$det[[idx]], sv_df$inv[[idx]], barge)
@@ -203,7 +203,7 @@ cle_svsrc <-
     grid_df <- mutate(grid_df, site_idx = group_indices(grid_df, selSite))
 
     if(cores>1){
-      plan(multicore, workers = cores)
+      plan(multisession, workers = cores)
       svsrc_cle <-
         future_pmap_dfr(grid_df , function(idx, site_idx,
                                            selSite, sels, gs, times, sources){
@@ -254,7 +254,7 @@ cle_multi <-
     grid_df <- mutate(grid_df, site_idx = group_indices(grid_df, selSite))
 
     if(cores>1){
-      plan(multicore, workers = cores)
+      plan(multisession, workers = cores)
       multi_cle <-
         future_pmap_dfr(grid_df , function(idx, site_idx,
                                            selSite, sels, gs, times, migs, sources){
