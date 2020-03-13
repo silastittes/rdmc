@@ -1,20 +1,20 @@
 #' Generate and transfer parameters, quantities, and objects used in a variety of downstream steps to Global environment.
 #'
 #'
-#' @param allFreqs Matrix of allele frequencies at putatively neutral sites with dimension numberOfPopulations x numberOfSites
-#' @param freqs_notRand Matrix of allele frequencies at putatively selected sites with dimension numberOfPopulations x numberOfSites
-#' @param selPops Vector of indices for populations that were hypothesized to have experienced selection.
-#' @param positions Vector of genomic positions for putatively selected region.
+#' @param allFreqs Matrix of allele frequencies at putatively neutral sites with dimension number of populations x number of sites.
+#' @param freqs_notRand Matrix of allele frequencies at putatively selected sites with dimension number of populations x number of sites.
+#' @param selPops Vector of indices for populations that experienced selection.
+#' @param positions Vector of genomic positions for selected region.
 #' @param n_sites Integer for the number of sites to propose as the selected site. Must be less than length(positions).
-#' @param sampleSizes Vector of sample sizes of length numberOfPopulations. (i.e. twice the number of diploid individuals sampled in each population)
-#' @param numPops Number of populations sampled (both selected and non-selected)
-#' @param numBins the number of bins in which to bin alleles a given distance from the proposed selected sites
+#' @param sampleSizes Vector of sample sizes of length number of populations. (i.e. twice the number of diploid individuals sampled in each population).
+#' @param numPops Number of populations sampled (both selected and non-selected).
+#' @param numBins the number of bins in which to bin alleles a given distance from the proposed selected sites.
 #' @param sels Vector of proposed selection coefficients.
-#' @param times Vector of proposed time in generations the variant is standing in populations before selection occurs and prior to migration from source population
-#' @param gs Vector of proposed frequencies of the standing variant migs: migration rate (proportion of individuals from source each generation). Note: cannot be 0
-#' @param migs Vector of proposed migration rates (proportion of individuals from source each generation)
-#' @param sources Vector of proposed source population of the beneficial allele for both migration and standing variant with source models. Note: the source must be a selected population in selPops
-#' @param Ne Effective population size (Assumed equal across all populations ??)
+#' @param times Vector of proposed time in generations the variant is standing in populations before selection occurs and prior to migration from source population.
+#' @param gs Vector of proposed frequencies of the standing variant migs: migration rate (proportion of individuals from source each generation). Note: cannot be 0.
+#' @param migs Vector of proposed migration rates (proportion of individuals from source each generation).
+#' @param sources Vector of proposed source population of the beneficial allele for both migration and standing variant with source models. Note: the source must be a selected population in selPops.
+#' @param Ne Effective population size (Assumed equal for all populations).
 #' @param rec Per base recombination rate for putatively selected region.
 #' @param locus_name String to name the locus. Helpful if multiple loci will be combined in subsequent analyses. Defaults to "locus"
 #' @param sets  List of length number of different modes of convergence to be specified vector "modes" where each element in list contains vector of populations with a given single mode of convergence i.e. if populations 2 and 6 share a mode and populations 3 has another, sets = list(c(2,6), 3). Required for modeling multiple modes.
@@ -239,7 +239,7 @@ parameter_barge <-
 #'
 #' @param barge An existing list object made by calling the parameter_barge() function.
 #' @param sets  List of length number of different modes of convergence to be specified vector "modes" where each element in list contains vector of populations with a given single mode of convergence i.e. if populations 2 and 6 share a mode and populations 3 has another, sets = list(c(2,6), 3).
-#' @param modes Character vector of length sets defining a new set of mixed modes for each set of selected populations ("ind", "sv", and/or "mig"). Other variables will be updated accordingly
+#' @param modes Character vector of length sets defining a new set of mixed modes for each set of selected populations ("ind", "sv", and/or "mig"). Other variables will be updated accordingly.
 #' @export
 
 update_mode <-

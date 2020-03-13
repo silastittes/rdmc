@@ -26,21 +26,21 @@ parameter_barge(
 )
 }
 \arguments{
-\item{allFreqs}{Matrix of allele frequencies at putatively neutral sites with dimension numberOfPopulations x numberOfSites}
+\item{allFreqs}{Matrix of allele frequencies at putatively neutral sites with dimension number of populations x number of sites.}
 
-\item{freqs_notRand}{Matrix of allele frequencies at putatively selected sites with dimension numberOfPopulations x numberOfSites}
+\item{freqs_notRand}{Matrix of allele frequencies at putatively selected sites with dimension number of populations x number of sites.}
 
-\item{selPops}{Vector of indices for populations that were hypothesized to have experienced selection.}
+\item{selPops}{Vector of indices for populations that experienced selection.}
 
-\item{positions}{Vector of genomic positions for putatively selected region.}
+\item{positions}{Vector of genomic positions for selected region.}
 
 \item{n_sites}{Integer for the number of sites to propose as the selected site. Must be less than length(positions).}
 
-\item{sampleSizes}{Vector of sample sizes of length numberOfPopulations. (i.e. twice the number of diploid individuals sampled in each population)}
+\item{sampleSizes}{Vector of sample sizes of length number of populations. (i.e. twice the number of diploid individuals sampled in each population).}
 
-\item{numPops}{Number of populations sampled (both selected and non-selected)}
+\item{numPops}{Number of populations sampled (both selected and non-selected).}
 
-\item{numBins}{the number of bins in which to bin alleles a given distance from the proposed selected sites}
+\item{numBins}{the number of bins in which to bin alleles a given distance from the proposed selected sites.}
 
 \item{sets}{List of length number of different modes of convergence to be specified vector "modes" where each element in list contains vector of populations with a given single mode of convergence i.e. if populations 2 and 6 share a mode and populations 3 has another, sets = list(c(2,6), 3). Required for modeling multiple modes.}
 
@@ -48,15 +48,15 @@ parameter_barge(
 
 \item{sels}{Vector of proposed selection coefficients.}
 
-\item{migs}{Vector of proposed migration rates (proportion of individuals from source each generation)}
+\item{migs}{Vector of proposed migration rates (proportion of individuals from source each generation).}
 
-\item{times}{Vector of proposed time in generations the variant is standing in populations before selection occurs and prior to migration from source population}
+\item{times}{Vector of proposed time in generations the variant is standing in populations before selection occurs and prior to migration from source population.}
 
-\item{gs}{Vector of proposed frequencies of the standing variant migs: migration rate (proportion of individuals from source each generation). Note: cannot be 0}
+\item{gs}{Vector of proposed frequencies of the standing variant migs: migration rate (proportion of individuals from source each generation). Note: cannot be 0.}
 
-\item{sources}{Vector of proposed source population of the beneficial allele for both migration and standing variant with source models. Note: the source must be a selected population in selPops}
+\item{sources}{Vector of proposed source population of the beneficial allele for both migration and standing variant with source models. Note: the source must be a selected population in selPops.}
 
-\item{Ne}{Effective population size (Assumed equal across all populations ??)}
+\item{Ne}{Effective population size (Assumed equal for all populations).}
 
 \item{rec}{Per base recombination rate for putatively selected region.}
 
