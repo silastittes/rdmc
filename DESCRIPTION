@@ -15,7 +15,7 @@ Authors@R:
            role = c("aut"),
            email = "first.last@example.com"))
 Description: Estimates composite likelihood models developed by Lee and Coop (2017) to infer the modes of convergent adaptation using allele frequency data from multuple populations.
-Depends: R (>= 3.4.0), MASS, dplyr, tidyr, purrr, furrr, magrittr, rlang (>= 0.4.3)
+Depends: R (>= 3.4.0), MASS, dplyr, tidyr, purrr, magrittr, rlang (>= 0.4.3)
 License: GPL (>=3)
 Encoding: UTF-8
 LazyData: true

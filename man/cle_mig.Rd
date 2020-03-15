@@ -4,12 +4,10 @@
 \alias{cle_mig}
 \title{Generate data frame for migration from a source population model}
 \usage{
-cle_mig(barge, cores = 1)
+cle_mig(barge)
 }
 \arguments{
 \item{barge}{List of parameters and data generated using parameter_barge()}
-
-\item{cores}{Number of cores to use. Defaults to 1. if More than one are used, furrr::feautre_pmap is used.}
 }
 \description{
 Generate data frame for migration from a source population model

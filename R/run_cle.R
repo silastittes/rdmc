@@ -37,11 +37,10 @@ cle_neutral <-
 #' Generate data frame for independent mutations model
 #'
 #'	@param barge List of parameters and data generated using parameter_barge()
-#'	@param cores Number of cores to use. Defaults to 1. if More than one are used, furrr::feautre_pmap is used.
 #'	@export
 
 cle_ind <-
-  function(barge, cores = 1){
+  function(barge){
 
     cmodes <- "independent"
     cpops <- paste0(barge$selPops, collapse = "-")
@@ -63,20 +62,11 @@ cle_ind <-
 
     grid_df <- mutate(grid_df, site_idx = group_indices(grid_df, selSite))
 
-    if(cores > 1){
-      plan(multicore, workers = cores)
-      ind_cle <-
-        future_pmap_dfr(grid_df, function(selSite, site_idx, sels, idx){
-          cle <- calcCompLikelihood_par(site_idx, ind_df$det[[idx]], ind_df$inv[[idx]], barge)
-          tibble(selSite, sels, cle, locus = barge$locus_name)
-        })
-    } else{
       ind_cle <-
         pmap_dfr(grid_df, function(selSite, site_idx, sels, idx){
           cle <- calcCompLikelihood_par(site_idx, ind_df$det[[idx]], ind_df$inv[[idx]], barge)
           tibble(selSite, sels, cle, locus = barge$locus_name)
         })
-    }
 
     ind_cle <- mutate(ind_cle, gs = as.numeric(NA), times = as.numeric(NA), migs = as.numeric(NA),
                       sources = as.numeric(NA), sel_pops = cpops, model = cmodes)
@@ -86,11 +76,10 @@ cle_ind <-
 #' Generate data frame for migration from a source population model
 #'
 #'	@param barge List of parameters and data generated using parameter_barge()
-#'	@param cores Number of cores to use. Defaults to 1. if More than one are used, furrr::feautre_pmap is used.
 #'	@export
 
 cle_mig <-
-  function(barge, cores = 1){
+  function(barge){
 
     cmodes <- "migration"
     cpops <- paste0(barge$selPops, collapse = "-")
@@ -112,20 +101,11 @@ cle_mig <-
         barge$mig_par)
     grid_df <- mutate(grid_df , site_idx = group_indices(grid_df, selSite))
 
-    if(cores > 1){
-      plan(multicore, workers = cores)
-      mig_cle <-
-        future_pmap_dfr(grid_df, function(selSite, idx, site_idx, sels, migs, sources){
-          cle <- calcCompLikelihood_par(site_idx, mig_df$det[[idx]], mig_df$inv[[idx]], barge)
-          tibble(selSite, sels, migs, sources, cle, locus = barge$locus_name)
-        })
-    } else {
       mig_cle <-
         pmap_dfr(grid_df, function(selSite, idx, site_idx, sels, migs, sources){
           cle <- calcCompLikelihood_par(site_idx, mig_df$det[[idx]], mig_df$inv[[idx]], barge)
           tibble(selSite, sels, migs, sources, cle, locus = barge$locus_name)
         })
-    }
 
     mig_cle <- mutate(mig_cle, gs = as.numeric(NA), times = as.numeric(NA), sel_pops = cpops, model = cmodes)
     return(mig_cle)
@@ -135,11 +115,10 @@ cle_mig <-
 #' Generate data frame for standing variation model
 #'
 #'	@param barge List of parameters and data generated using parameter_barge()
-#'	@param cores Number of cores to use. Defaults to 1. if More than one are used, furrr::feautre_pmap is used.
 #'	@export
 
 cle_sv <-
-  function(barge, cores = 1){
+  function(barge){
 
     cmodes <- "sv"
     cpops <- paste0(barge$selPops, collapse = "-")
@@ -159,21 +138,14 @@ cle_sv <-
       expand_grid(
         selSite = barge$selSite,
         barge$sv_par)
+
     grid_df <- mutate(grid_df , site_idx = group_indices(grid_df, selSite))
 
-      plan(multicore, workers = cores)
-      sv_cle <-
-        future_pmap_dfr(grid_df, function(selSite, idx, site_idx, sels, gs, times){
-          cle <- calcCompLikelihood_par(site_idx, sv_df$det[[idx]], sv_df$inv[[idx]], barge)
-          tibble(selSite, sels, gs, times, cle, locus = barge$locus_name)
-        })
-    } else {
       sv_cle <-
         pmap_dfr(grid_df, function(selSite, idx, site_idx, sels, gs, times){
           cle <- calcCompLikelihood_par(site_idx, sv_df$det[[idx]], sv_df$inv[[idx]], barge)
           tibble(selSite, sels, gs, times, cle, locus = barge$locus_name)
         })
-    }
 
     sv_cle <- mutate(sv_cle, migs = as.numeric(NA), sources = as.numeric(NA), sel_pops = cpops, model = cmodes)
     return(sv_cle)
@@ -183,11 +155,10 @@ cle_sv <-
 #' Generate data frame for standing variation from a source population model.
 #'
 #'	@param barge List of parameters and data generated using parameter_barge()
-#'	@param cores Number of cores to use. Defaults to 1. if More than one are used, furrr::feautre_pmap is used.
 #'	@export
 
 cle_svsrc <-
-  function(barge, cores = 1){
+  function(barge){
 
     cmodes <- "svsrc"
     cpops <- paste0(barge$selPops, collapse = "-")
@@ -210,22 +181,13 @@ cle_svsrc <-
         barge$svsrc_par)
     grid_df <- mutate(grid_df, site_idx = group_indices(grid_df, selSite))
 
-    if(cores>1){
-      plan(multicore, workers = cores)
-      svsrc_cle <-
-        future_pmap_dfr(grid_df , function(idx, site_idx,
-                                           selSite, sels, gs, times, sources){
-          cle <- calcCompLikelihood_par(site_idx, sv_df$det[[idx]], sv_df$inv[[idx]], barge)
-          tibble(selSite, sels, gs, times, sources, cle, locus = barge$locus_name)
-        })
-    } else {
       svsrc_cle <-
         pmap_dfr(grid_df, function(idx, site_idx,
                                    selSite, sels, gs, times, sources){
           cle <- calcCompLikelihood_par(site_idx, sv_df$det[[idx]], sv_df$inv[[idx]], barge)
           tibble(selSite, sels, gs, times, sources, cle, locus = barge$locus_name)
         })
-    }
+
     svsrc_cle <- mutate(svsrc_cle, migs = as.numeric(NA), sel_pops = cpops, model = cmodes)
     return(svsrc_cle)
   }
@@ -235,11 +197,10 @@ cle_svsrc <-
 #' Generate data frame for multiple modes
 #'
 #'	@param barge List of parameters and data generated using parameter_barge()
-#'	@param cores Number of cores to use. Defaults to 1. if More than one are used, furrr::feautre_pmap is used.
 #'	@export
 
 cle_multi <-
-  function(barge, cores = 1){
+  function(barge){
 
     cmodes <- paste0(rep(barge$modes, map_dbl(barge$sets, length)), collapse = "-")
     cpops <- paste0(map_chr(barge$sets, paste, collapse = "_"), collapse = "-")
@@ -261,22 +222,13 @@ cle_multi <-
         barge$multi_par)
     grid_df <- mutate(grid_df, site_idx = group_indices(grid_df, selSite))
 
-    if(cores>1){
-      plan(multicore, workers = cores)
-      multi_cle <-
-        future_pmap_dfr(grid_df , function(idx, site_idx,
-                                           selSite, sels, gs, times, migs, sources){
-          cle <- calcCompLikelihood_par(site_idx, multi_df$det[[idx]], multi_df$inv[[idx]], barge)
-          tibble(selSite, sels, gs, times, migs, sources, cle, locus = barge$locus_name, sel_pops = cpops, model = cmodes)
-        })
-    } else {
       multi_cle <-
         pmap_dfr(grid_df , function(idx, site_idx,
                                     selSite, sels, gs, times, migs, sources){
           cle <- calcCompLikelihood_par(site_idx, multi_df$det[[idx]], multi_df$inv[[idx]], barge)
           tibble(selSite, sels, gs, times, migs, sources, cle, locus = barge$locus_name, sel_pops = cpops, model = cmodes)
         })
-    }
+
     multi_cle <- mutate(multi_cle,
                         sels = as.numeric(sels),
                         gs = as.numeric(gs),

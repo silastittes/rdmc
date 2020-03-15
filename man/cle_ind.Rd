@@ -4,12 +4,10 @@
 \alias{cle_ind}
 \title{Generate data frame for independent mutations model}
 \usage{
-cle_ind(barge, cores = 1)
+cle_ind(barge)
 }
 \arguments{
 \item{barge}{List of parameters and data generated using parameter_barge()}
-
-\item{cores}{Number of cores to use. Defaults to 1. if More than one are used, furrr::feautre_pmap is used.}
 }
 \description{
 Generate data frame for independent mutations model

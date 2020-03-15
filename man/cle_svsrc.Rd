@@ -4,12 +4,10 @@
 \alias{cle_svsrc}
 \title{Generate data frame for standing variation from a source population model.}
 \usage{
-cle_svsrc(barge, cores = 1)
+cle_svsrc(barge)
 }
 \arguments{
 \item{barge}{List of parameters and data generated using parameter_barge()}
-
-\item{cores}{Number of cores to use. Defaults to 1. if More than one are used, furrr::feautre_pmap is used.}
 }
 \description{
 Generate data frame for standing variation from a source population model.
