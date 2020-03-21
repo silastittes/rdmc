@@ -26,21 +26,9 @@ parameter_barge(
 )
 }
 \arguments{
-\item{allFreqs}{Matrix of allele frequencies at putatively neutral sites with dimension number of populations x number of sites.}
-
-\item{freqs_notRand}{Matrix of allele frequencies at putatively selected sites with dimension number of populations x number of sites.}
-
-\item{selPops}{Vector of indices for populations that experienced selection.}
-
 \item{positions}{Vector of genomic positions for selected region.}
 
 \item{n_sites}{Integer for the number of sites to propose as the selected site. Must be less than length(positions).}
-
-\item{sampleSizes}{Vector of sample sizes of length number of populations. (i.e. twice the number of diploid individuals sampled in each population).}
-
-\item{numPops}{Number of populations sampled (both selected and non-selected).}
-
-\item{numBins}{the number of bins in which to bin alleles a given distance from the proposed selected sites.}
 
 \item{sets}{List of length number of different modes of convergence to be specified vector "modes" where each element in list contains vector of populations with a given single mode of convergence i.e. if populations 2 and 6 share a mode and populations 3 has another, sets = list(c(2,6), 3). Required for modeling multiple modes. Only required for fitting mixed mode models.}
 
@@ -61,6 +49,18 @@ parameter_barge(
 \item{rec}{Per base recombination rate for putatively selected region.}
 
 \item{locus_name}{String to name the locus. Helpful if multiple loci will be combined in subsequent analyses. Defaults to "locus".}
+
+\item{neutral_freqs}{Matrix of allele frequencies at putatively neutral sites with dimension number of populations x number of sites.}
+
+\item{selected_freqs}{Matrix of allele frequencies at putatively selected sites with dimension number of populations x number of sites.}
+
+\item{selected_pops}{Vector of indices for populations that experienced selection.}
+
+\item{sample_sizes}{Vector of sample sizes of length number of populations. (i.e. twice the number of diploid individuals sampled in each population).}
+
+\item{num_pops}{Number of populations sampled (both selected and non-selected).}
+
+\item{num_bins}{the number of bins in which to bin alleles a given distance from the proposed selected sites.}
 }
 \description{
 Generate and transfer parameters, quantities, and objects used in a variety of downstream steps to Global environment.

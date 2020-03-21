@@ -1,14 +1,14 @@
 #' Generate and transfer parameters, quantities, and objects used in a variety of downstream steps to Global environment.
 #'
 #'
-#' @param allFreqs Matrix of allele frequencies at putatively neutral sites with dimension number of populations x number of sites.
-#' @param freqs_notRand Matrix of allele frequencies at putatively selected sites with dimension number of populations x number of sites.
-#' @param selPops Vector of indices for populations that experienced selection.
+#' @param neutral_freqs Matrix of allele frequencies at putatively neutral sites with dimension number of populations x number of sites.
+#' @param selected_freqs Matrix of allele frequencies at putatively selected sites with dimension number of populations x number of sites.
+#' @param selected_pops Vector of indices for populations that experienced selection.
 #' @param positions Vector of genomic positions for selected region.
 #' @param n_sites Integer for the number of sites to propose as the selected site. Must be less than length(positions).
-#' @param sampleSizes Vector of sample sizes of length number of populations. (i.e. twice the number of diploid individuals sampled in each population).
-#' @param numPops Number of populations sampled (both selected and non-selected).
-#' @param numBins the number of bins in which to bin alleles a given distance from the proposed selected sites.
+#' @param sample_sizes Vector of sample sizes of length number of populations. (i.e. twice the number of diploid individuals sampled in each population).
+#' @param num_pops Number of populations sampled (both selected and non-selected).
+#' @param num_bins the number of bins in which to bin alleles a given distance from the proposed selected sites.
 #' @param sels Vector of proposed selection coefficients.
 #' @param times Vector of proposed time in generations the variant is standing in populations before selection occurs and prior to migration from source population.
 #' @param gs Vector of proposed frequencies of the standing variant migs: migration rate (proportion of individuals from source each generation). Note: cannot be 0.
@@ -40,6 +40,18 @@ parameter_barge <-
            Ne,
            rec,
            locus_name = "locus") {
+
+
+
+    #convert variable names
+    allFreqs = neutral_freqs
+    freqs_notRand = selected_freqs
+    selPops = selected_pops
+    sampleSizes = sample_sizes
+    numPops = num_pops
+    numBins = num_bins
+
+
     #generated stuff
     sources = selPops
     selSite = seq(min(positions), max(positions), length.out = n_sites)
