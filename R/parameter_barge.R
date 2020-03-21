@@ -22,9 +22,9 @@
 #' @export
 
 parameter_barge <-
-  function(allFreqs,
-           neutral_freqs,
-           sel_pops,
+  function(neutral_freqs,
+           selected_freqs,
+           selected_pops,
            positions,
            n_sites,
            sample_sizes,

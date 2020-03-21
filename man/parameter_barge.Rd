@@ -5,9 +5,9 @@
 \title{Generate and transfer parameters, quantities, and objects used in a variety of downstream steps to Global environment.}
 \usage{
 parameter_barge(
-  allFreqs,
   neutral_freqs,
-  sel_pops,
+  selected_freqs,
+  selected_pops,
   positions,
   n_sites,
   sample_sizes,
@@ -27,6 +27,10 @@ parameter_barge(
 }
 \arguments{
 \item{neutral_freqs}{Matrix of allele frequencies at putatively neutral sites with dimension number of populations x number of sites.}
+
+\item{selected_freqs}{Matrix of allele frequencies at putatively selected sites with dimension number of populations x number of sites.}
+
+\item{selected_pops}{Vector of indices for populations that experienced selection.}
 
 \item{positions}{Vector of genomic positions for selected region.}
 
@@ -57,10 +61,6 @@ parameter_barge(
 \item{rec}{Per base recombination rate for putatively selected region.}
 
 \item{locus_name}{String to name the locus. Helpful if multiple loci will be combined in subsequent analyses. Defaults to "locus".}
-
-\item{selected_freqs}{Matrix of allele frequencies at putatively selected sites with dimension number of populations x number of sites.}
-
-\item{selected_pops}{Vector of indices for populations that experienced selection.}
 }
 \description{
 Generate and transfer parameters, quantities, and objects used in a variety of downstream steps to Global environment.
