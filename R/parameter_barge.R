@@ -23,13 +23,13 @@
 
 parameter_barge <-
   function(allFreqs,
-           freqs_notRand,
-           selPops,
+           neutral_freqs,
+           sel_pops,
            positions,
            n_sites,
-           sampleSizes,
-           numPops,
-           numBins,
+           sample_sizes,
+           num_pops,
+           num_bins,
            sets = NULL,
            modes = NULL,
            sels,
