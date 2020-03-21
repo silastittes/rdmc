@@ -16,7 +16,7 @@ cle_neutral <-
     neutral_cle <-
       pmap_dfr(grid_df, function(selSite, site_idx, idx){
         cle <- calcCompLikelihood_par(site_idx, barge$det_FOmegas_neutral,  barge$inv_FOmegas_neutral, barge, neutral = TRUE)
-        tibble(selSite, cle, locus = barge$locus_name)
+        tibble(selected_sites = selSite, cle, locus = barge$locus_name)
       })
 
     neutral_cle <- mutate(
@@ -65,7 +65,7 @@ cle_ind <-
       ind_cle <-
         pmap_dfr(grid_df, function(selSite, site_idx, sels, idx){
           cle <- calcCompLikelihood_par(site_idx, ind_df$det[[idx]], ind_df$inv[[idx]], barge)
-          tibble(selSite, sels, cle, locus = barge$locus_name)
+          tibble(selected_sites = selSite, sels, cle, locus = barge$locus_name)
         })
 
     ind_cle <- mutate(ind_cle, gs = as.numeric(NA), times = as.numeric(NA), migs = as.numeric(NA),
@@ -104,7 +104,7 @@ cle_mig <-
       mig_cle <-
         pmap_dfr(grid_df, function(selSite, idx, site_idx, sels, migs, sources){
           cle <- calcCompLikelihood_par(site_idx, mig_df$det[[idx]], mig_df$inv[[idx]], barge)
-          tibble(selSite, sels, migs, sources, cle, locus = barge$locus_name)
+          tibble(selected_sites = selSite, sels, migs, sources, cle, locus = barge$locus_name)
         })
 
     mig_cle <- mutate(mig_cle, gs = as.numeric(NA), times = as.numeric(NA), sel_pops = cpops, model = cmodes)
@@ -144,7 +144,7 @@ cle_sv <-
       sv_cle <-
         pmap_dfr(grid_df, function(selSite, idx, site_idx, sels, gs, times){
           cle <- calcCompLikelihood_par(site_idx, sv_df$det[[idx]], sv_df$inv[[idx]], barge)
-          tibble(selSite, sels, gs, times, cle, locus = barge$locus_name)
+          tibble(selected_sites = selSite, sels, gs, times, cle, locus = barge$locus_name)
         })
 
     sv_cle <- mutate(sv_cle, migs = as.numeric(NA), sources = as.numeric(NA), sel_pops = cpops, model = cmodes)
@@ -185,7 +185,7 @@ cle_svsrc <-
         pmap_dfr(grid_df, function(idx, site_idx,
                                    selSite, sels, gs, times, sources){
           cle <- calcCompLikelihood_par(site_idx, sv_df$det[[idx]], sv_df$inv[[idx]], barge)
-          tibble(selSite, sels, gs, times, sources, cle, locus = barge$locus_name)
+          tibble(selected_sites = selSite, sels, gs, times, sources, cle, locus = barge$locus_name)
         })
 
     svsrc_cle <- mutate(svsrc_cle, migs = as.numeric(NA), sel_pops = cpops, model = cmodes)
@@ -226,7 +226,7 @@ cle_multi <-
         pmap_dfr(grid_df , function(idx, site_idx,
                                     selSite, sels, gs, times, migs, sources){
           cle <- calcCompLikelihood_par(site_idx, multi_df$det[[idx]], multi_df$inv[[idx]], barge)
-          tibble(selSite, sels, gs, times, migs, sources, cle, locus = barge$locus_name, sel_pops = cpops, model = cmodes)
+          tibble(selected_sites = selSite, sels, gs, times, migs, sources, cle, locus = barge$locus_name, sel_pops = cpops, model = cmodes)
         })
 
     multi_cle <- mutate(multi_cle,
