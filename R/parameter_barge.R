@@ -8,7 +8,7 @@
 #' @param n_sites Integer for the number of sites to propose as the selected site. Must be less than or equal to length(positions).
 #' @param sample_sizes Vector of sample sizes of length number of populations. (i.e. twice the number of diploid individuals sampled in each population).
 #' @param num_pops Number of populations sampled (both selected and non-selected).
-#' @param num_bins the number of bins in which to bin alleles a given distance from the proposed selected sites.
+#' @param num_bins The number of bins in which to bin alleles a given distance from the proposed selected sites.
 #' @param sels Vector of proposed selection coefficients.
 #' @param times Vector of proposed times in generations the variant is standing in populations before selection occurs and prior to migration from source population.
 #' @param gs Vector of proposed frequencies of the standing variant.
