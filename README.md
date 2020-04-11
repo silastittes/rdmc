@@ -28,7 +28,7 @@ data(selectedRegionPositions_example)
 data(selectedRegionAlleleFreqs_example)
 
 #specify parameters and input data.
-barge <-
+param_list <-
   parameter_barge(
     Ne =  10000,
     rec = 0.005,
@@ -56,19 +56,19 @@ barge <-
   )
 
 #composite likelihood estimates for each model. note: multi core will no work in RStudio
-neut_cle <- cle_neutral(barge)
-ind_cle <- cle_ind(barge)
-mig_cle <- cle_mig(barge)
-sv_cle <- cle_svsrc(barge)
+neut_cle <- cle_neutral(param_list)
+ind_cle <- cle_ind(param_list)
+mig_cle <- cle_mig(param_list)
+sv_cle <- cle_svsrc(param_list)
 
-barge <-
-  update_mode(barge = barge,
+param_list <-
+  update_mode(barge = param_list,
               sets = list(c(1, 3), 5),
               modes = c("sv", "ind"))
-multi_svind <- cle_multi(barge)
+multi_svind <- cle_multi(param_list)
 
-barge <- update_mode(barge = barge, sets = barge$sets, modes =  c("mig", "ind"))
-multi_migind <- cle_multi(barge)
+param_list <- update_mode(barge = param_list, sets = barge$sets, modes =  c("mig", "ind"))
+multi_migind <- cle_multi(param_list)
 
 #combine all data sets
 mergeby <- names(neut_cle)
