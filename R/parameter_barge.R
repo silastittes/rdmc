@@ -7,7 +7,6 @@
 #' @param positions Vector of genomic positions for the selected region.
 #' @param n_sites Integer for the number of sites to propose as the selected site. Must be less than or equal to length(positions).
 #' @param sample_sizes Vector of sample sizes of length number of populations. (i.e. twice the number of diploid individuals sampled in each population).
-#' @param num_pops Number of populations sampled (both selected and non-selected).
 #' @param num_bins The number of bins in which to bin alleles a given distance from the proposed selected sites.
 #' @param sels Vector of proposed selection coefficients.
 #' @param times Vector of proposed times in generations the variant is standing in populations before selection occurs and prior to migration from source population.
@@ -17,7 +16,7 @@
 #' @param Ne Effective population size (assumed equal for all populations).
 #' @param rec Per base recombination rate for the putatively selected region.
 #' @param locus_name String to name the locus. Helpful if multiple loci will be combined in subsequent analyses. Defaults to "locus".
-#' @param sets  A list of population indices, where each element in the list contains a vector of populations with a given mode of convergence. For example, if populations 2 and 6 share a mode and population 3 has another, sets = list(c(2,6), 3). Required for modeling multiple modes. Only required for fitting models with mixed modes. Must be used in conjunction with the "modes"
+#' @param sets  A list of population indices, where each element in the list contains a vector of populations with a given mode of convergence. For example, if populations 2 and 6 share a mode and population 3 has another, sets = list(c(2,6), 3). Required for modeling multiple modes. Only required for fitting models with mixed modes. Must be used in conjunction with the "modes".
 #' @param modes Character vector of length sets defining mode for each set of selected populations ("ind", "sv", and/or "mig"). Only required for fitting models with mixed modes.
 #' @export
 
@@ -28,7 +27,6 @@ parameter_barge <-
            positions,
            n_sites,
            sample_sizes,
-           num_pops,
            num_bins,
            sets = NULL,
            modes = NULL,
@@ -41,14 +39,16 @@ parameter_barge <-
            rec,
            locus_name = "locus") {
 
-
+    if(dim(neutral_freqs)[1] != dim(selected_freqs)[1]){
+      stop("Number of populations for neutral_freqs and selected_freqs do not match.")
+    }
 
     #convert variable names
     allFreqs = neutral_freqs
     freqs_notRand = selected_freqs
     selPops = selected_pops
     sampleSizes = sample_sizes
-    numPops = num_pops
+    numPops = dim(selected_freqs)[1]
     numBins = num_bins
 
 
