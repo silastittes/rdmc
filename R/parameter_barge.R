@@ -5,7 +5,6 @@
 #' @param selected_freqs Matrix of allele frequencies at putatively selected sites with dimensions, number of populations x number of sites.
 #' @param selected_pops Vector of indices for populations that experienced selection.
 #' @param positions Vector of genomic positions for the selected region.
-#' @param num_pops of populations sampled (both selected and non-selected).
 #' @param n_sites Integer for the number of sites to propose as the selected site. Must be less than or equal to length(positions).
 #' @param sample_sizes Vector of sample sizes of length number of populations. (i.e. twice the number of diploid individuals sampled in each population).
 #' @param num_bins The number of bins in which to bin alleles a given distance from the proposed selected sites.
@@ -27,7 +26,6 @@ parameter_barge <-
            selected_pops,
            positions,
            n_sites,
-           num_pops,
            sample_sizes,
            num_bins,
            sets = NULL,
@@ -50,7 +48,7 @@ parameter_barge <-
     freqs_notRand = selected_freqs
     selPops = selected_pops
     sampleSizes = sample_sizes
-    numPops = num_pops
+    numPops = dim(selected_freqs)[1]
     numBins = num_bins
 
 
@@ -278,28 +276,23 @@ update_mode <-
       mutate(distinct(dplyr::select(full_par, -migs)), idx = 1:n())
 
     modes_s <- unique(sort(modes))
-    multi_par <-
-      ifelse(
-        identical(modes_s, c("ind", "sv")),
-        tibble(expand_grid(sels, gs, times, migs = migs[1], sources)),
-        ifelse(
-          identical(modes_s, c("ind", "mig")),
-          tibble(expand_grid(
-            sels, gs = gs[1], times = times[1], migs, sources
-          )),
-          ifelse(
-            identical(modes_s, c("mig", "sv")),
-            tibble(expand_grid(sels, gs, times, migs, sources)),
-            ifelse(identical(modes_s, c("ind", "sv", "mig")),
-                   tibble(
-                     expand_grid(sels, gs, times, migs, sources)
-                   ),
-                   NA)
-          )
-        )
-      )[[1]]
-    #multi_par <- expand_grid(sels, gs, times, migs, sources)
+
+
+    if(identical(modes_s, c("ind", "sv"))){
+      multi_par <- tibble(expand_grid(sels, gs, times, migs = migs[1], sources))
+    }
+    if(identical(modes_s, c("ind", "mig"))){
+      multi_par <- tibble(expand_grid(sels, gs = gs[1], times = times[1], migs, sources))
+    }
+    if(identical(modes_s, c("mig", "sv"))){
+      multi_par <- tibble(expand_grid(sels, gs, times, migs, sources))
+    }
+    if(identical(modes_s, c("ind", "sv", "mig"))){
+      multi_par <- tibble(expand_grid(sels, gs, times, migs, sources))
+    }
+
     multi_par <- mutate(multi_par, idx = 1:n())
+
 
     barge$sets <- sets
     barge$modes <- modes
