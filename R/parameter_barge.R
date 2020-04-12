@@ -5,6 +5,7 @@
 #' @param selected_freqs Matrix of allele frequencies at putatively selected sites with dimensions, number of populations x number of sites.
 #' @param selected_pops Vector of indices for populations that experienced selection.
 #' @param positions Vector of genomic positions for the selected region.
+#' @param num_pops of populations sampled (both selected and non-selected).
 #' @param n_sites Integer for the number of sites to propose as the selected site. Must be less than or equal to length(positions).
 #' @param sample_sizes Vector of sample sizes of length number of populations. (i.e. twice the number of diploid individuals sampled in each population).
 #' @param num_bins The number of bins in which to bin alleles a given distance from the proposed selected sites.
@@ -26,6 +27,7 @@ parameter_barge <-
            selected_pops,
            positions,
            n_sites,
+           num_pops,
            sample_sizes,
            num_bins,
            sets = NULL,
@@ -48,7 +50,7 @@ parameter_barge <-
     freqs_notRand = selected_freqs
     selPops = selected_pops
     sampleSizes = sample_sizes
-    numPops = dim(selected_freqs)[1]
+    numPops = num_pops
     numBins = num_bins
 
 
