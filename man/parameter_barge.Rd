@@ -11,7 +11,6 @@ parameter_barge(
   positions,
   n_sites,
   sample_sizes,
-  num_pops,
   num_bins,
   sets = NULL,
   modes = NULL,
@@ -26,39 +25,37 @@ parameter_barge(
 )
 }
 \arguments{
-\item{neutral_freqs}{Matrix of allele frequencies at putatively neutral sites with dimension number of populations x number of sites.}
+\item{neutral_freqs}{Matrix of allele frequencies at putatively neutral sites with dimensions,  number of populations x number of sites.}
 
-\item{selected_freqs}{Matrix of allele frequencies at putatively selected sites with dimension number of populations x number of sites.}
+\item{selected_freqs}{Matrix of allele frequencies at putatively selected sites with dimensions, number of populations x number of sites.}
 
 \item{selected_pops}{Vector of indices for populations that experienced selection.}
 
-\item{positions}{Vector of genomic positions for selected region.}
+\item{positions}{Vector of genomic positions for the selected region.}
 
-\item{n_sites}{Integer for the number of sites to propose as the selected site. Must be less than length(positions).}
+\item{n_sites}{Integer for the number of sites to propose as the selected site. Must be less than or equal to length(positions).}
 
 \item{sample_sizes}{Vector of sample sizes of length number of populations. (i.e. twice the number of diploid individuals sampled in each population).}
 
-\item{num_pops}{Number of populations sampled (both selected and non-selected).}
+\item{num_bins}{The number of bins in which to bin alleles a given distance from the proposed selected sites.}
 
-\item{num_bins}{the number of bins in which to bin alleles a given distance from the proposed selected sites.}
+\item{sets}{A list of population indices, where each element in the list contains a vector of populations with a given mode of convergence. For example, if populations 2 and 6 share a mode and population 3 has another, sets = list(c(2,6), 3). Required for modeling multiple modes. Only required for fitting models with mixed modes. Must be used in conjunction with the "modes".}
 
-\item{sets}{List of length number of different modes of convergence to be specified vector "modes" where each element in list contains vector of populations with a given single mode of convergence i.e. if populations 2 and 6 share a mode and populations 3 has another, sets = list(c(2,6), 3). Required for modeling multiple modes. Only required for fitting mixed mode models.}
-
-\item{modes}{Character vector of length sets defining mode for each set of selected populations ("ind", "sv", and/or "mig"). Only required for fitting mixed mode models.}
+\item{modes}{Character vector of length sets defining mode for each set of selected populations ("ind", "sv", and/or "mig"). Only required for fitting models with mixed modes.}
 
 \item{sels}{Vector of proposed selection coefficients.}
 
-\item{migs}{Vector of proposed migration rates (proportion of individuals from source each generation).}
+\item{migs}{Vector of proposed migration rates (proportion of individuals of migrat origin each generation). Cannot be 0.}
 
-\item{times}{Vector of proposed time in generations the variant is standing in populations before selection occurs and prior to migration from source population.}
+\item{times}{Vector of proposed times in generations the variant is standing in populations before selection occurs and prior to migration from source population.}
 
-\item{gs}{Vector of proposed frequencies of the standing variant migs: migration rate (proportion of individuals from source each generation). Note: cannot be 0.}
+\item{gs}{Vector of proposed frequencies of the standing variant.}
 
-\item{sources}{Vector of proposed source population of the beneficial allele for both migration and standing variant with source models. Note: the source must be a selected population in selPops.}
+\item{sources}{Vector of population indices to propose as the source population of the beneficial allele. Used for both the migration and standing variant with source models. Note: the source must be one of the populations contained in selPops.}
 
-\item{Ne}{Effective population size (Assumed equal for all populations).}
+\item{Ne}{Effective population size (assumed equal for all populations).}
 
-\item{rec}{Per base recombination rate for putatively selected region.}
+\item{rec}{Per base recombination rate for the putatively selected region.}
 
 \item{locus_name}{String to name the locus. Helpful if multiple loci will be combined in subsequent analyses. Defaults to "locus".}
 }
