@@ -1,6 +1,7 @@
 # rdmc
 ## R package for Distinguishing among modes of convergent adaptation using population genomic data.
 
+
 NOTE: This package is a work in progress, especially the documentation. All effort will be made to keep updates backwards compatible, but there are no guarantees.
 
 This is the source code page for an R package implementing methods presented in Lee and Coop (2017). [See this page for Kristin Lee's original code and exentions](https://github.com/kristinmlee/rdmc/)
