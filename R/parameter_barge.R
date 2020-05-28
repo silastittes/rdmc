@@ -1,3 +1,21 @@
+
+#Functions intended for intneral use only
+
+#' Slightly faster Determinant
+#' @param Sigma Covariance matrix
+#' @NoRd
+chol_det <- function(Sigma){
+  exp(2*sum(log(diag(chol(Sigma)))))
+}
+
+#' Fast matrix inversion, requires Sigma is singular definite.
+#' @param Sigma Covariance matrix
+#' @NoRd
+chol_inv <- function(Sigma){
+  chol2inv(chol(Sigma))
+}
+
+
 #' Generate and transfer parameters, quantities, and objects used in a variety of downstream steps to Global environment.
 #'
 #'
@@ -85,8 +103,9 @@ parameter_barge <-
     diag(Tmatrix) = (M - 1) / M
     sampleErrorMatrix = diag(1 / sampleSizes, nrow = numPops, ncol = numPops)
 
-    det_FOmegas_neutral = det(Tmatrix %*% (F_estimate + sampleErrorMatrix) %*% t(Tmatrix))
-    inv_FOmegas_neutral = ginv(Tmatrix %*% (F_estimate + sampleErrorMatrix) %*% t(Tmatrix))
+    Sigma <- Tmatrix %*% (F_estimate + sampleErrorMatrix) %*% t(Tmatrix)
+    det_FOmegas_neutral = chol_det(Sigma)
+    inv_FOmegas_neutral = chol_inv(Sigma)
 
 
     #grids of parameter combinations to search over for each of the three main models. more to come?

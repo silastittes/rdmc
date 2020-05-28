@@ -48,8 +48,8 @@ cle_ind <-
     ind_df <-
       do(group_by(barge$ind_par, idx), {
         FOmegas_ind <- calcFOmegas_indSweeps(.$sels, barge)
-        det <- map(FOmegas_ind, ~det(.x))
-        inv <- map(FOmegas_ind, ~ginv(.x))
+        det <- map(FOmegas_ind, ~chol_det(.x))
+        inv <- map(FOmegas_ind, ~chol_inv(.x))
         tribble(
           ~FOmegas_ind, ~det, ~inv,
           FOmegas_ind, det, inv
@@ -87,8 +87,8 @@ cle_mig <-
     mig_df <-
       do(group_by(barge$mig_par, idx), {
         FOmegas_mig <- calcFOmegas_mig(.$sels, .$migs, .$sources, barge)
-        det <- map(FOmegas_mig, ~det(.x))
-        inv <- map(FOmegas_mig, ~ginv(.x))
+        det <- map(FOmegas_mig, ~chol_det(.x))
+        inv <- map(FOmegas_mig, ~chol_inv(.x))
         tribble(
           ~FOmegas_mig, ~det, ~inv,
           FOmegas_mig, det, inv
@@ -126,8 +126,8 @@ cle_sv <-
     sv_df <-
       do(group_by(barge$sv_par, idx), {
         FOmegas_sv <- calcFOmegas_stdVar(.$sels, .$gs, .$times, barge)
-        det <- map(FOmegas_sv, ~det(.x))
-        inv <- map(FOmegas_sv, ~ginv(.x))
+        det <- map(FOmegas_sv, ~chol_det(.x))
+        inv <- map(FOmegas_sv, ~chol_inv(.x))
         tribble(
           ~FOmegas_sv, ~det, ~inv,
           FOmegas_sv, det, inv
@@ -167,8 +167,8 @@ cle_svsrc <-
     sv_df <-
       do(group_by(barge$svsrc_par, idx), {
         FOmegas_sv <- calcFOmegas_stdVar.source(.$sels, .$gs, .$times, .$sources, barge)
-        det <- map(FOmegas_sv, ~det(.x))
-        inv <- map(FOmegas_sv, ~ginv(.x))
+        det <- map(FOmegas_sv, ~chol_det(.x))
+        inv <- map(FOmegas_sv, ~chol_inv(.x))
         tribble(
           ~FOmegas_sv, ~det, ~inv,
           FOmegas_sv, det, inv
@@ -208,8 +208,8 @@ cle_multi <-
     multi_df <-
       do(group_by(barge$multi_par, idx), {
         FOmegas_multi <- calcFOmegas_mixed(.$sels, .$gs, .$times, .$migs, .$sources, barge)
-        det <- map(FOmegas_multi, ~det(.x))
-        inv <- map(FOmegas_multi, ~ginv(.x))
+        det <- map(FOmegas_multi, ~ chol_det(.x))
+        inv <- map(FOmegas_multi, ~chol_inv(.x))
         tribble(
           ~FOmegas_multi, ~det, ~inv,
           FOmegas_multi, det, inv
