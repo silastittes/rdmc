@@ -3,7 +3,6 @@
 
 #' Slightly faster Determinant
 #' @param Sigma Covariance matrix
-#' @NoRd
 chol_det <- function(Sigma){
   tryCatch(exp(2*sum(log(diag(chol(Sigma))))),
            error = function(c) "Cholesky factorization didn't work. Change 'parameter_barge(..,cholesky = FALSE)'",
@@ -14,7 +13,6 @@ chol_det <- function(Sigma){
 
 #' Fast matrix inversion, requires Sigma is singular definite.
 #' @param Sigma Covariance matrix
-#' @NoRd
 chol_inv <- function(Sigma){
   tryCatch(chol2inv(chol(Sigma)),
            error = function(c) "Cholesky factorization didn't work. Try 'parameter_barge(..,cholesky = FALSE)'",
