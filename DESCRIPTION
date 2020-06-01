@@ -19,4 +19,4 @@ Depends: R (>= 3.4.0), MASS, dplyr, tidyr, purrr, magrittr, rlang (>= 0.4.3)
 License: GPL (>=3)
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.0.0
+RoxygenNote: 7.1.0

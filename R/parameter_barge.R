@@ -5,14 +5,21 @@
 #' @param Sigma Covariance matrix
 #' @NoRd
 chol_det <- function(Sigma){
-  exp(2*sum(log(diag(chol(Sigma)))))
+  tryCatch(exp(2*sum(log(diag(chol(Sigma))))),
+           error = function(c) "Cholesky factorization didn't work. Change 'parameter_barge(..,cholesky = FALSE)'",
+           warning = function(c) "Cholesky factorization didn't work. Change 'parameter_barge(..,cholesky = FALSE)'"
+  )
 }
+
 
 #' Fast matrix inversion, requires Sigma is singular definite.
 #' @param Sigma Covariance matrix
 #' @NoRd
 chol_inv <- function(Sigma){
-  chol2inv(chol(Sigma))
+  tryCatch(chol2inv(chol(Sigma)),
+           error = function(c) "Cholesky factorization didn't work. Try 'parameter_barge(..,cholesky = FALSE)'",
+           warning = function(c) "Cholesky factorization didn't work. Try 'parameter_barge(..,cholesky = FALSE)'"
+  )
 }
 
 
@@ -36,6 +43,7 @@ chol_inv <- function(Sigma){
 #' @param locus_name String to name the locus. Helpful if multiple loci will be combined in subsequent analyses. Defaults to "locus".
 #' @param sets  A list of population indices, where each element in the list contains a vector of populations with a given mode of convergence. For example, if populations 2 and 6 share a mode and population 3 has another, sets = list(c(2,6), 3). Required for modeling multiple modes. Only required for fitting models with mixed modes. Must be used in conjunction with the "modes".
 #' @param modes Character vector of length sets defining mode for each set of selected populations ("ind", "sv", and/or "mig"). Only required for fitting models with mixed modes.
+#' @param cholesky Logical to use cholesky factorization of covariance matrix. Faster, but not guaranteed to work for all data sets. TRUE by default. if FALSE, ginv() from MASS is used.
 #' @export
 
 parameter_barge <-
@@ -55,7 +63,8 @@ parameter_barge <-
            sources,
            Ne,
            rec,
-           locus_name = "locus") {
+           locus_name = "locus",
+           cholesky = TRUE) {
 
     if(dim(neutral_freqs)[1] != dim(selected_freqs)[1]){
       stop("Number of populations for neutral_freqs and selected_freqs do not match.")
@@ -104,8 +113,15 @@ parameter_barge <-
     sampleErrorMatrix = diag(1 / sampleSizes, nrow = numPops, ncol = numPops)
 
     Sigma <- Tmatrix %*% (F_estimate + sampleErrorMatrix) %*% t(Tmatrix)
-    det_FOmegas_neutral = chol_det(Sigma)
-    inv_FOmegas_neutral = chol_inv(Sigma)
+
+    if(cholesky){
+      inv_FOmegas_neutral = chol_inv(Sigma)
+      det_FOmegas_neutral = chol_det(Sigma)
+    } else {
+      det_FOmegas_neutral = det(Sigma)
+      inv_FOmegas_neutral = ginv(Sigma)
+    }
+
 
 
     #grids of parameter combinations to search over for each of the three main models. more to come?
@@ -256,7 +272,8 @@ parameter_barge <-
         freqs = freqs,
         freqs_MC = freqs_MC,
         my.seq = my.seq,
-        distBins = distBins
+        distBins = distBins,
+        cholesky = cholesky
       )
 
     return(barge_list)

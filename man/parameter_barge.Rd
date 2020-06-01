@@ -21,7 +21,8 @@ parameter_barge(
   sources,
   Ne,
   rec,
-  locus_name = "locus"
+  locus_name = "locus",
+  cholesky = TRUE
 )
 }
 \arguments{
@@ -58,6 +59,8 @@ parameter_barge(
 \item{rec}{Per base recombination rate for the putatively selected region.}
 
 \item{locus_name}{String to name the locus. Helpful if multiple loci will be combined in subsequent analyses. Defaults to "locus".}
+
+\item{cholesky}{Logical to use cholesky factorization of covariance matrix. Faster, but not guaranteed to work for all data sets. TRUE by default. if FALSE, ginv() from MASS is used.}
 }
 \description{
 Generate and transfer parameters, quantities, and objects used in a variety of downstream steps to Global environment.
