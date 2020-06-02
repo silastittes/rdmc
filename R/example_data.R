@@ -1,7 +1,16 @@
 #' Example data
 #' @docType data
 #'
-#' @usage data(neutralAlleleFreqs_example)
+#' @usage data(selected_freqs)
+#'
+#' @keywords datasets
+#'
+
+
+#' Example data
+#' @docType data
+#'
+#' @usage data(neutral_freqs)
 #'
 #' @keywords datasets
 #'
@@ -9,15 +18,6 @@
 #' Example data
 #' @docType data
 #'
-#' @usage data(selectedRegionPositions_example)
+#' @usage data(positions)
 #'
 #' @keywords datasets
-
-
-#' Example data
-#' @docType data
-#'
-#' @usage data(selectedRegionAlleleFreqs_example)
-#'
-#' @keywords datasets
-#'
