@@ -76,8 +76,8 @@ mode_cle <-
       cpops <- paste0(barge$selPops, collapse = "-")
 
       ind_df <-
-        do(group_by(barge$ind_par, idx), {
-          FOmegas_ind <- calcFOmegas_indSweeps(.$sels, barge)
+        pmap_dfr(barge$ind_par, function(sels, idx){
+          FOmegas_ind <- calcFOmegas_indSweeps(sels, barge)
           if(barge$cholesky){
             det <- map(FOmegas_ind, ~chol_det(.x))
             inv <- map(FOmegas_ind, ~chol_inv(.x))
@@ -85,6 +85,7 @@ mode_cle <-
             det <- map(FOmegas_ind, ~det(.x))
             inv <- map(FOmegas_ind, ~ginv(.x))
           }
+
           tribble(
             ~FOmegas_ind, ~det, ~inv,
             FOmegas_ind, det, inv
@@ -113,8 +114,8 @@ mode_cle <-
       cpops <- paste0(barge$selPops, collapse = "-")
 
       mig_df <-
-        do(group_by(barge$mig_par, idx), {
-          FOmegas_mig <- calcFOmegas_mig(.$sels, .$migs, .$sources, barge)
+        pmap_dfr(barge$mig_par, function(sels, migs, sources, idx){
+          FOmegas_mig <- calcFOmegas_mig(sels, migs, sources, barge)
 
           if(barge$cholesky){
             det <- map(FOmegas_mig, ~chol_det(.x))
@@ -150,9 +151,8 @@ mode_cle <-
       cpops <- paste0(barge$selPops, collapse = "-")
 
       sv_df <-
-        do(group_by(barge$sv_par, idx), {
-          FOmegas_sv <- calcFOmegas_stdVar(.$sels, .$gs, .$times, barge)
-
+        pmap_dfr(barge$sv_par, function(sels, gs, times, idx){
+          FOmegas_sv <- calcFOmegas_stdVar(sels, gs, times, barge)
           if(barge$cholesky){
             det <- map(FOmegas_sv, ~chol_det(.x))
             inv <- map(FOmegas_sv, ~chol_inv(.x))
@@ -188,10 +188,9 @@ mode_cle <-
       cmodes <- "standing_source"
       cpops <- paste0(barge$selPops, collapse = "-")
 
-
       sv_df <-
-        do(group_by(barge$svsrc_par, idx), {
-          FOmegas_sv <- calcFOmegas_stdVar.source(.$sels, .$gs, .$times, .$sources, barge)
+        pmap_dfr(barge$svsrc_par, function(sels, gs, times, sources, idx){
+          FOmegas_sv <- calcFOmegas_stdVar.source(sels, gs, times, sources, barge)
 
           if(barge$cholesky){
             det <- map(FOmegas_sv, ~chol_det(.x))
@@ -229,8 +228,8 @@ mode_cle <-
       cpops <- paste0(map_chr(barge$sets, paste, collapse = "_"), collapse = "-")
 
       multi_df <-
-        do(group_by(barge$multi_par, idx), {
-          FOmegas_multi <- calcFOmegas_mixed(.$sels, .$gs, .$times, .$migs, .$sources, barge)
+        pmap_dfr(barge$multi_par, function(sels, gs, times, migs, sources, idx){
+          FOmegas_multi <- calcFOmegas_mixed(sels, gs, times, migs, sources, barge)
 
           if(barge$cholesky){
             det <- map(FOmegas_multi, ~chol_det(.x))
@@ -276,4 +275,10 @@ mode_cle <-
     }
 
   }
+
+
+
+
+
+
 
