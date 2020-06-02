@@ -1,8 +1,9 @@
 
-#Functions intended for intneral use only
 
 #' Slightly faster Determinant
 #' @param Sigma Covariance matrix
+#' @noRd
+#' @export
 chol_det <- function(Sigma){
   tryCatch(exp(2*sum(log(diag(chol(Sigma))))),
            error = function(c) "Cholesky factorization didn't work. Change 'parameter_barge(..,cholesky = FALSE)'",
@@ -13,6 +14,8 @@ chol_det <- function(Sigma){
 
 #' Fast matrix inversion, requires Sigma is singular definite.
 #' @param Sigma Covariance matrix
+#' @noRd
+#' @export
 chol_inv <- function(Sigma){
   tryCatch(chol2inv(chol(Sigma)),
            error = function(c) "Cholesky factorization didn't work. Try 'parameter_barge(..,cholesky = FALSE)'",
@@ -20,15 +23,15 @@ chol_inv <- function(Sigma){
   )
 }
 
-
-#' Generate and transfer parameters, quantities, and objects used in a variety of downstream steps to Global environment.
+#' Generate and transfer parameters, quantities, and objects used for fitting downstream convergent adaptation models.
 #'
 #'
 #' @param neutral_freqs Matrix of allele frequencies at putatively neutral sites with dimensions,  number of populations x number of sites.
 #' @param selected_freqs Matrix of allele frequencies at putatively selected sites with dimensions, number of populations x number of sites.
 #' @param selected_pops Vector of indices for populations that experienced selection.
 #' @param positions Vector of genomic positions for the selected region.
-#' @param n_sites Integer for the number of sites to propose as the selected site. Must be less than or equal to length(positions).
+#' @param n_sites Integer for the number of sites to propose as the selected site. Sites are uniformly placed along \code{positions} using \code{seq(min(positions), max(positions), length.out = n_sites)}. Must be less than or equal to \code{length(positions)}. Cannot be used with \code{sel_sites}.
+#' @param sel_sites Optional vector of sites to propose as selected site. Useful if particular loci are suspected to be under selection. Cannot be used with \code{n_sites}.
 #' @param sample_sizes Vector of sample sizes of length number of populations. (i.e. twice the number of diploid individuals sampled in each population).
 #' @param num_bins The number of bins in which to bin alleles a given distance from the proposed selected sites.
 #' @param sels Vector of proposed selection coefficients.
@@ -40,8 +43,8 @@ chol_inv <- function(Sigma){
 #' @param rec Per base recombination rate for the putatively selected region.
 #' @param locus_name String to name the locus. Helpful if multiple loci will be combined in subsequent analyses. Defaults to "locus".
 #' @param sets  A list of population indices, where each element in the list contains a vector of populations with a given mode of convergence. For example, if populations 2 and 6 share a mode and population 3 has another, sets = list(c(2,6), 3). Required for modeling multiple modes. Only required for fitting models with mixed modes. Must be used in conjunction with the "modes".
-#' @param modes Character vector of length sets defining mode for each set of selected populations ("ind", "sv", and/or "mig"). Only required for fitting models with mixed modes.
-#' @param cholesky Logical to use cholesky factorization of covariance matrix. Faster, but not guaranteed to work for all data sets. TRUE by default. if FALSE, ginv() from MASS is used.
+#' @param modes Character vector of length sets defining mode for each set of selected populations ("independent", "standing", and/or "migration"). Only required for fitting models with mixed modes. More details about the modes is available on help page for \code{\link{mode_cle}}
+#' @param cholesky Logical to use cholesky factorization of covariance matrix. Used for both inverse and determinant. Faster, but not guaranteed to work for all data sets. TRUE by default. if FALSE, \code{\link[MASS]{ginv}} from MASS is used.
 #' @export
 
 parameter_barge <-
@@ -49,7 +52,8 @@ parameter_barge <-
            selected_freqs,
            selected_pops,
            positions,
-           n_sites,
+           n_sites = NULL,
+           sel_sites = NULL,
            sample_sizes,
            num_bins,
            sets = NULL,
@@ -79,7 +83,17 @@ parameter_barge <-
 
     #generated stuff
     sources = selPops
-    selSite = seq(min(positions), max(positions), length.out = n_sites)
+
+
+    if(missing(sel_sites) & missing(n_sites)){
+      stop("sel_sites or n_sites argument must be used, but not both! sel_sites requires a vector of length > 0, n_sites requires an integer > 0.")
+    } else if(missing(sel_sites) & !missing(n_sites)){
+      selSite = seq(min(positions), max(positions), length.out = n_sites)
+    } else if(!missing(sel_sites) & missing(n_sites)){
+      selSite = sel_sites
+    } else{
+      stop("sel_sites or n_sites argument must be used, but not both! sel_sites requires a vector of length > 0, n_sites requires an integer > 0.")
+    }
 
     allRunFreq = apply(allFreqs, 2, function(my.freqs) {
       if (runif(1) < 0.5) {
@@ -140,18 +154,18 @@ parameter_barge <-
       modes_s <- unique(sort(modes))
       multi_par <-
         ifelse(
-          identical(modes_s, c("ind", "sv")),
+          identical(modes_s, c("independent", "standing_source")),
           tibble(expand_grid(sels, gs, times, migs = migs[1], sources)),
           ifelse(
-            identical(modes_s, c("ind", "mig")),
+            identical(modes_s, c("independent", "migration")),
             tibble(expand_grid(
               sels, gs = gs[1], times = times[1], migs, sources
             )),
             ifelse(
-              identical(modes_s, c("mig", "sv")),
+              identical(modes_s, c("migration", "standing_source")),
               tibble(expand_grid(sels, gs, times, migs, sources)),
               ifelse(identical(modes_s, c(
-                "ind", "sv", "mig"
+                "independent", "standing_source", "migration"
               )),
               tibble(
                 expand_grid(sels, gs, times, migs, sources)
@@ -285,7 +299,7 @@ parameter_barge <-
 #'
 #' @param barge An existing list object made by calling the parameter_barge() function.
 #' @param sets  List of length number of different modes of convergence to be specified vector "modes" where each element in list contains vector of populations with a given single mode of convergence i.e. if populations 2 and 6 share a mode and populations 3 has another, sets = list(c(2,6), 3).
-#' @param modes Character vector of length sets defining a new set of mixed modes for each set of selected populations ("ind", "sv", and/or "mig"). Other variables will be updated accordingly.
+#' @param modes Character vector of length sets defining a new set of mixed modes for each set of selected populations ("independent", "standing_source", and/or "migration"). Other variables will be updated accordingly.
 #' @export
 
 update_mode <-
@@ -312,16 +326,16 @@ update_mode <-
     modes_s <- unique(sort(modes))
 
 
-    if(identical(modes_s, c("ind", "sv"))){
+    if(identical(modes_s, c("independent", "standing_source"))){
       multi_par <- tibble(expand_grid(sels, gs, times, migs = migs[1], sources))
     }
-    if(identical(modes_s, c("ind", "mig"))){
+    if(identical(modes_s, c("independent", "migration"))){
       multi_par <- tibble(expand_grid(sels, gs = gs[1], times = times[1], migs, sources))
     }
-    if(identical(modes_s, c("mig", "sv"))){
+    if(identical(modes_s, c("migration", "standing_source"))){
       multi_par <- tibble(expand_grid(sels, gs, times, migs, sources))
     }
-    if(identical(modes_s, c("ind", "sv", "mig"))){
+    if(identical(modes_s, c("independent", "standing_source", "migration"))){
       multi_par <- tibble(expand_grid(sels, gs, times, migs, sources))
     }
 

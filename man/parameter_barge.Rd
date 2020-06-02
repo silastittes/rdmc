@@ -2,14 +2,15 @@
 % Please edit documentation in R/parameter_barge.R
 \name{parameter_barge}
 \alias{parameter_barge}
-\title{Generate and transfer parameters, quantities, and objects used in a variety of downstream steps to Global environment.}
+\title{Generate and transfer parameters, quantities, and objects used for fitting downstream convergent adaptation models.}
 \usage{
 parameter_barge(
   neutral_freqs,
   selected_freqs,
   selected_pops,
   positions,
-  n_sites,
+  n_sites = NULL,
+  sel_sites = NULL,
   sample_sizes,
   num_bins,
   sets = NULL,
@@ -34,7 +35,9 @@ parameter_barge(
 
 \item{positions}{Vector of genomic positions for the selected region.}
 
-\item{n_sites}{Integer for the number of sites to propose as the selected site. Must be less than or equal to length(positions).}
+\item{n_sites}{Integer for the number of sites to propose as the selected site. Sites are uniformly placed along \code{positions} using \code{seq(min(positions), max(positions), length.out = n_sites)}. Must be less than or equal to \code{length(positions)}. Cannot be used with \code{sel_sites}.}
+
+\item{sel_sites}{Optional vector of sites to propose as selected site. Useful if particular loci are suspected to be under selection. Cannot be used with \code{n_sites}.}
 
 \item{sample_sizes}{Vector of sample sizes of length number of populations. (i.e. twice the number of diploid individuals sampled in each population).}
 
@@ -42,7 +45,7 @@ parameter_barge(
 
 \item{sets}{A list of population indices, where each element in the list contains a vector of populations with a given mode of convergence. For example, if populations 2 and 6 share a mode and population 3 has another, sets = list(c(2,6), 3). Required for modeling multiple modes. Only required for fitting models with mixed modes. Must be used in conjunction with the "modes".}
 
-\item{modes}{Character vector of length sets defining mode for each set of selected populations ("ind", "sv", and/or "mig"). Only required for fitting models with mixed modes.}
+\item{modes}{Character vector of length sets defining mode for each set of selected populations ("independent", "standing", and/or "migration"). Only required for fitting models with mixed modes. More details about the modes is available on help page for \code{\link{mode_cle}}}
 
 \item{sels}{Vector of proposed selection coefficients.}
 
@@ -60,8 +63,8 @@ parameter_barge(
 
 \item{locus_name}{String to name the locus. Helpful if multiple loci will be combined in subsequent analyses. Defaults to "locus".}
 
-\item{cholesky}{Logical to use cholesky factorization of covariance matrix. Faster, but not guaranteed to work for all data sets. TRUE by default. if FALSE, ginv() from MASS is used.}
+\item{cholesky}{Logical to use cholesky factorization of covariance matrix. Used for both inverse and determinant. Faster, but not guaranteed to work for all data sets. TRUE by default. if FALSE, \code{\link[MASS]{ginv}} from MASS is used.}
 }
 \description{
-Generate and transfer parameters, quantities, and objects used in a variety of downstream steps to Global environment.
+Generate and transfer parameters, quantities, and objects used for fitting downstream convergent adaptation models.
 }
