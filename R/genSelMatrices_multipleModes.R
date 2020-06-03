@@ -246,7 +246,7 @@ calcFOmegas_mixed = function(sel, g, time, mig, my.source, params) {
 
 
   for(set in 1 : length(sets)) {
-    if(modes[set] == "sv") {
+    if(modes[set] == "standing_source") {
       y = exp(-rec * midDistances / sel * log(1 / g))
       Rf = 4 * Ne * rec * midDistances * g
       rt = exp(-rec * midDistances * time)
@@ -255,11 +255,11 @@ calcFOmegas_mixed = function(sel, g, time, mig, my.source, params) {
       FOmegas = lapply(1 : length(midDistances), function(i) calctotAddF_sv_source.set(y[[i]], Rf[[i]],
                                                                                        rt[[i]], p_no[[i]], p_one[[i]], my.source, set, params) + FOmegas[[i]])
     }
-    else if(modes[set] == "ind") {
+    else if(modes[set] == "independent") {
       FOmegas = lapply(1 : length(midDistances), function(i) calctotAddF_ind.set(y[[i]], set, params) +
                          FOmegas[[i]])
     }
-    else if(modes[set] == "mig") {
+    else if(modes[set] == "migration") {
       delta = 1 / sel * log(1 + sel/(mig))
       e_delta = exp(-rec * midDistances * delta)
       my.Q = 1 / (1 + 4 * Ne * mig)

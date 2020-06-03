@@ -164,9 +164,7 @@ parameter_barge <-
             ifelse(
               identical(modes_s, c("migration", "standing_source")),
               tibble(expand_grid(sels, gs, times, migs, sources)),
-              ifelse(identical(modes_s, c(
-                "independent", "standing_source", "migration"
-              )),
+              ifelse(identical(modes_s, c("independent", "migration", "standing_source")),
               tibble(
                 expand_grid(sels, gs, times, migs, sources)
               ),
@@ -325,6 +323,10 @@ update_mode <-
 
     modes_s <- unique(sort(modes))
 
+    if(length(setdiff(modes_s, c("independent", "migration", "standing_source")))){
+      stop("Only 'independent', 'migration', or 'standing_source' are allowed as vector elements for the modes argument")
+    }
+
 
     if(identical(modes_s, c("independent", "standing_source"))){
       multi_par <- tibble(expand_grid(sels, gs, times, migs = migs[1], sources))
@@ -335,7 +337,7 @@ update_mode <-
     if(identical(modes_s, c("migration", "standing_source"))){
       multi_par <- tibble(expand_grid(sels, gs, times, migs, sources))
     }
-    if(identical(modes_s, c("independent", "standing_source", "migration"))){
+    if(identical(modes_s, c("independent", "migration", "standing_source"))){
       multi_par <- tibble(expand_grid(sels, gs, times, migs, sources))
     }
 
