@@ -57,17 +57,20 @@ param_list <-
   )
 
 
+#fit composite likelihood models
 neut_cle <- mode_cle(param_list, mode = "neutral")
 ind_cle <- mode_cle(param_list, mode = "independent")
 mig_cle <- mode_cle(param_list, mode = "migration")
 sv_cle <- mode_cle(param_list, mode = "standing_source")
 
 
+#update barge to fit a  mixed-mode model
 param_list <-
   update_mode(barge = param_list,
               sets = list(c(1, 3), 5),
               modes = c("standing_source", "independent"))
 
+#fit mixed-mode model
 multi_svind <- mode_cle(param_list, "multi")
 
 
@@ -76,6 +79,8 @@ param_list <- update_mode(barge = param_list, sets = list(c(1, 3), 5), modes =  
 multi_migind <- mode_cle(param_list, "multi")
 
 
+
+#merge data frame of all fit models
 mergeby <- names(neut_cle)
 all_mods <-
   full_join(ind_cle, mig_cle, by = mergeby) %>%
