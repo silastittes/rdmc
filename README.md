@@ -10,13 +10,12 @@ While there is a good amount of additions, there are only minimal changes to the
 
 The code below is a reimplementation of [Kristin Lee's original DMC example.](https://github.com/kristinmlee/rdmc/blob/master/dmc_example.md), using the same example data.
 
-If this package is used, *please* cite Lee and Coop (2017), and share a link this page. A preprint should be available to cite the r package in the near future. 
+
+A manuscript describing this package is in revision. An earlier version is available [here](https://www.biorxiv.org/content/10.1101/2020.04.22.056150v1). If the package is used, *please* cite Lee and Coop (2017). Full citation information is available from the R package (after installation) by running the command `citation("rdmc")`.
 
 ## Usage
 
 ```
-
-devtools::install_github(repo = "silastittes/rdmc")
 library(rdmc)
 library(ggplot2)
 library(cowplot)
@@ -24,22 +23,22 @@ theme_set(theme_cowplot(font_size = 15))
 
 
 #load example data
-data(neutralAlleleFreqs_example)
-data(selectedRegionPositions_example)
-data(selectedRegionAlleleFreqs_example)
+data(neutral_freqs)
+data(selected_freqs)
+data(positions)
+
 
 #specify parameters and input data.
 param_list <-
   parameter_barge(
     Ne =  10000,
     rec = 0.005,
-    neutral_freqs = allFreqs,
-    selected_freqs = freqs_notRand,
+    neutral_freqs = neutral_freqs,
+    selected_freqs = selected_freqs,
     selected_pops = c(1, 3, 5),
     positions = positions,
     n_sites = 10,
     sample_sizes = rep(10, 6),
-    num_pops = 6,
     num_bins = 1000,
     sels = c(
       1e-4,
@@ -53,25 +52,30 @@ param_list <-
     gs = c(1 / (2 * 10000), 10 ^ -(4:1)),
     migs = c(10 ^ -(seq(5, 1, by = -2)), 0.5, 1),
     sources = selected_pops,
-    locus_name = "chow"
+    locus_name = "test_locus",
+    cholesky = TRUE
   )
 
-#composite likelihood estimates for each model. note: multi core will no work in RStudio
-neut_cle <- cle_neutral(param_list)
-ind_cle <- cle_ind(param_list)
-mig_cle <- cle_mig(param_list)
-sv_cle <- cle_svsrc(param_list)
+
+neut_cle <- mode_cle(param_list, mode = "neutral")
+ind_cle <- mode_cle(param_list, mode = "independent")
+mig_cle <- mode_cle(param_list, mode = "migration")
+sv_cle <- mode_cle(param_list, mode = "standing_source")
+
 
 param_list <-
   update_mode(barge = param_list,
               sets = list(c(1, 3), 5),
-              modes = c("sv", "ind"))
-multi_svind <- cle_multi(param_list)
+              modes = c("standing_source", "independent"))
 
-param_list <- update_mode(barge = param_list, sets = barge$sets, modes =  c("mig", "ind"))
-multi_migind <- cle_multi(param_list)
+multi_svind <- mode_cle(param_list, "multi")
 
-#combine all data sets
+
+#update to another mixed-mode
+param_list <- update_mode(barge = param_list, sets = list(c(1, 3), 5), modes =  c("migration", "independent"))
+multi_migind <- mode_cle(param_list, "multi")
+
+
 mergeby <- names(neut_cle)
 all_mods <-
   full_join(ind_cle, mig_cle, by = mergeby) %>%
@@ -79,14 +83,29 @@ all_mods <-
   full_join(., multi_svind, by = mergeby) %>%
   full_join(., multi_migind, by = mergeby)
 
-readr::write_csv(all_mods, "all_mods.csv")
 
-all_mods <- readr::read_csv("all_mods.csv")
-#get max comp likelihood parameters estimates for all models
 all_mods %>%
   group_by(model) %>%
   filter(cle == max(cle))
+```
 
+## Summarize
+
+```
+# A tibble: 5 x 10
+# Groups:   model [5]
+  selected_sites  sels   cle locus            gs times     migs sources sel_pops model                                      
+           <dbl> <dbl> <dbl> <chr>         <dbl> <dbl>    <dbl>   <dbl> <chr>    <chr>                                      
+1         0.0017  0.03 3708. test_locus NA          NA NA            NA 1-3-5    independent                                
+2         0.0017  0.03 3404. test_locus NA          NA  0.00001       3 1-3-5    migration                                  
+3         0.0017  0.05 3733. test_locus  0.01     1000 NA             3 1-3-5    standing_source                            
+4         0.0017  0.03 3745. test_locus  0.01    10000  0.00001       1 1_3-5    standing_source-standing_source-independent
+5         0.0017  0.03 3605. test_locus  0.00005     0  0.00001       1 1_3-5    migration-migration-independent
+```
+
+## Visualize
+
+```
 neut <- unique(neut_cle$cle)
 all_mods %>%
   group_by(selected_sites, model) %>%
@@ -111,3 +130,5 @@ all_mods %>%
   scale_color_brewer(palette = "Set1")
 
 ```
+
+![]("")

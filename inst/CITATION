@@ -1,13 +1,26 @@
 
-citHeader("Thank you for citing.")
-          
-citEntry(entry = "Misc", 
+citHeader("Thank you for citing. If used, please be sure to cite both of these entries.")
+
+citEntry(entry = "Misc",
          title = "Distinguishing among modes of convergent adaptation using population genomic data.",
          author = c(person("Kristin", "Lee"),
                     person("Graham", "Coop")),
+         journal = "Gentics",
          year = 2017,
          url = "https://doi.org/10.1534/genetics.117.300417",
          textVersion =
            paste0("Lee, Kristin M., and Graham Coop (", 2017, "). ",
                  title = "Distinguishing among modes of convergent adaptation using population genomic data.")
 )
+
+citEntry(entry = "Misc",
+  title="rdmc: an open source R package implementing convergent adaptation models of Lee and Coop (2017).",
+  author= "Tittes, Silas",
+  url = "https://doi.org/10.1101/2020.04.22.056150",
+  journal="BioRxiv",
+  year=2020,
+  textVersion =
+      paste0("Tittes, Silas (", 2020, ").",
+      title = "rdmc: an open source R package implementing convergent adaptation models of Lee and Coop (2017).")
+)
+
