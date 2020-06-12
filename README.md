@@ -24,7 +24,7 @@ devtools::install_github('silastittes/rdmc')
 
 
 ```
-devtools::install_github('silastittes/rdmc', branch = 'ginv')
+devtools::install_github('silastittes/rdmc', ref = 'ginv')
 ```
 
 The output from the two versions should be the same, but the master version is faster and has much better function documentation.
