@@ -1,9 +1,9 @@
-#' Fit composite likelihood model of convergent adaption.
+#' Fit composite likelihood model of convergent adaptation.
 #'
 #'	@param barge List of parameters and data generated using \code{\link{parameter_barge}}
-#'	@param mode Specify the mode of convergent adaption. Options are:
+#'	@param mode Specify the mode of convergent adaptation. Options are:
 #'
-#'	"neutral" -- Neutral model. Return same composite likelihood across all sites.
+#'	"neutral" -- Neutral model. Returns same composite likelihood across all sites.
 #'
 #'	"independent" --  Selected mutation occurred independently in all populations specified in \code{selected_pops}
 #'
