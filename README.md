@@ -163,7 +163,6 @@ all_mods %>%
   ggplot(aes(sels, mcle, colour = model)) +
   geom_line() +
   geom_point() +
-  geom_vline(xintercept = 0.05, lty = 2) +
   ylab("Composite likelihood") +
   xlab("Selection coefficient") +
   scale_color_brewer(palette = "Set1")
