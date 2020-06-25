@@ -44,7 +44,6 @@ data(selected_freqs)
 data(positions)
 
 
-#specify parameters and input data.
 param_list <-
   parameter_barge(
     Ne =  10000,
@@ -73,6 +72,7 @@ param_list <-
   )
 
 
+
 #fit composite likelihood models
 neut_cle <- mode_cle(param_list, mode = "neutral")
 ind_cle <- mode_cle(param_list, mode = "independent")
@@ -80,37 +80,54 @@ mig_cle <- mode_cle(param_list, mode = "migration")
 sv_cle <- mode_cle(param_list, mode = "standing_source")
 
 
+
 #update barge to fit a  mixed-mode model
 param_list <-
-  update_mode(barge = param_list,
-              sets = list(c(1, 3), 5),
-              modes = c("standing_source", "independent"))
+  update_mode(
+    barge = param_list,
+    sets = list(c(1, 3), 5),
+    modes = c("standing_source", "independent"))
 
 #fit mixed-mode model
 multi_svind <- mode_cle(param_list, "multi")
 
-
 #update to another mixed-mode
-param_list <- update_mode(barge = param_list, sets = list(c(1, 3), 5), modes =  c("migration", "independent"))
+param_list <-
+  update_mode(
+    barge = param_list,
+    sets = list(c(1, 3), 5),
+    modes =  c("migration", "independent"))
+
+#fit mixed-mode model
 multi_migind <- mode_cle(param_list, "multi")
 
 
-
 #merge data frame of all fit models
-mergeby <- names(neut_cle)
 all_mods <-
-  full_join(ind_cle, mig_cle, by = mergeby) %>%
-  full_join(., sv_cle, by = mergeby) %>%
-  full_join(., multi_svind, by = mergeby) %>%
-  full_join(., multi_migind, by = mergeby)
+  bind_rows(
+    ind_cle,
+    mig_cle,
+    sv_cle,
+    multi_svind,
+    multi_migind
+  )
 
 
+```
+
+
+## Summarize
+
+
+```
+#max composite likelihood estimate 
+#of all params over all models  
 all_mods %>%
   group_by(model) %>%
   filter(cle == max(cle))
+
 ```
 
-## Summarize
 
 ```
 # A tibble: 5 x 10
@@ -146,6 +163,7 @@ all_mods %>%
   ggplot(aes(sels, mcle, colour = model)) +
   geom_line() +
   geom_point() +
+  geom_vline(xintercept = 0.05, lty = 2) +
   ylab("Composite likelihood") +
   xlab("Selection coefficient") +
   scale_color_brewer(palette = "Set1")

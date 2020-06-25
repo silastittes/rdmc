@@ -49,7 +49,9 @@ mode_cle <-
       grid_df <- expand_grid(
         selSite = barge$selSite,
         barge$neut_par)
-      grid_df <- mutate(grid_df, site_idx = group_indices(grid_df, selSite))
+      #grid_df <- mutate(grid_df, site_idx = group_indices(grid_df, selSite))
+      grid_df <- mutate(grid_df, site_idx = group_indices(group_by(grid_df, selSite)))
+
 
       neutral_cle <-
         pmap_dfr(grid_df, function(selSite, site_idx, idx){
@@ -96,7 +98,9 @@ mode_cle <-
         selSite = barge$selSite,
         barge$ind_par)
 
-      grid_df <- mutate(grid_df, site_idx = group_indices(grid_df, selSite))
+      #grid_df <- mutate(grid_df, site_idx = group_indices(grid_df, selSite))
+      grid_df <- mutate(grid_df, site_idx = group_indices(group_by(grid_df, selSite)))
+
 
       ind_cle <-
         pmap_dfr(grid_df, function(selSite, site_idx, sels, idx){
@@ -134,7 +138,10 @@ mode_cle <-
         expand_grid(
           selSite = barge$selSite,
           barge$mig_par)
-      grid_df <- mutate(grid_df , site_idx = group_indices(grid_df, selSite))
+
+      #grid_df <- mutate(grid_df , site_idx = group_indices(grid_df, selSite))
+      grid_df <- mutate(grid_df, site_idx = group_indices(group_by(grid_df, selSite)))
+
 
       mig_cle <-
         pmap_dfr(grid_df, function(selSite, idx, site_idx, sels, migs, sources){
@@ -172,7 +179,9 @@ mode_cle <-
           selSite = barge$selSite,
           barge$sv_par)
 
-      grid_df <- mutate(grid_df , site_idx = group_indices(grid_df, selSite))
+      #grid_df <- mutate(grid_df , site_idx = group_indices(grid_df, selSite))
+      grid_df <- mutate(grid_df, site_idx = group_indices(group_by(grid_df, selSite)))
+
 
       sv_cle <-
         pmap_dfr(grid_df, function(selSite, idx, site_idx, sels, gs, times){
@@ -210,7 +219,10 @@ mode_cle <-
         expand_grid(
           selSite = barge$selSite,
           barge$svsrc_par)
-      grid_df <- mutate(grid_df, site_idx = group_indices(grid_df, selSite))
+
+      #grid_df <- mutate(grid_df, site_idx = group_indices(grid_df, selSite))
+      grid_df <- mutate(grid_df, site_idx = group_indices(group_by(grid_df, selSite)))
+
 
       svsrc_cle <-
         pmap_dfr(grid_df, function(idx, site_idx,
@@ -249,7 +261,10 @@ mode_cle <-
         expand_grid(
           selSite = barge$selSite,
           barge$multi_par)
-      grid_df <- mutate(grid_df, site_idx = group_indices(grid_df, selSite))
+
+      #grid_df <- mutate(grid_df, site_idx = group_indices(grid_df, selSite))
+      grid_df <- mutate(grid_df, site_idx = group_indices(group_by(grid_df, selSite)))
+
 
       multi_cle <-
         pmap_dfr(grid_df , function(idx, site_idx,
