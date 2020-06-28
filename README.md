@@ -118,7 +118,6 @@ all_mods <-
 
 ## Summarize
 
-
 ```
 #max composite likelihood estimate 
 #of all params over all models  
@@ -139,6 +138,16 @@ all_mods %>%
 3         0.0017  0.05 3733. test_locus  0.01     1000 NA             3 1-3-5    standing_source                            
 4         0.0017  0.03 3745. test_locus  0.01    10000  0.00001       1 1_3-5    standing_source-standing_source-independent
 5         0.0017  0.03 3605. test_locus  0.00005     0  0.00001       1 1_3-5    migration-migration-independent
+```
+
+
+## Save to file
+
+```
+#write neutral and model results to separate files
+readr::write_csv(neut_cle, "rdmc_neutral.csv")
+readr::write_csv(all_mods, "rdmc_modes.csv")
+
 ```
 
 ## Visualize
@@ -163,10 +172,10 @@ all_mods %>%
   ggplot(aes(sels, mcle, colour = model)) +
   geom_line() +
   geom_point() +
+  geom_vline(xintercept = 0.05, lty = 2) +
   ylab("Composite likelihood") +
   xlab("Selection coefficient") +
   scale_color_brewer(palette = "Set1")
-
 ```
 
 ![](https://github.com/silastittes/rdmc/blob/choleskyd/man/figures/cle.png?raw=true)
