@@ -20,14 +20,14 @@ A manuscript describing this package is in revision. An earlier version is avail
 devtools::install_github('silastittes/rdmc')
 ```
 
-*NOTE*: I have made several updates to the package compared to the version currently available on BioXiv. If you need to use the older version for some reason, please modify the above installation to:
+*NOTE*: I have made several updates to the package since it's initial release. If you need to use the older version for some reason, please modify the above installation to:
 
 
 ```
 devtools::install_github('silastittes/rdmc', ref = 'ginv')
 ```
 
-The output from the two versions should be the same, but the master version is faster and has much better function documentation.
+The output from the two versions should be the same, but the current master version is faster and has much better function documentation.
 
 ## Usage
 
