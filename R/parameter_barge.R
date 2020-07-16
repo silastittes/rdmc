@@ -5,10 +5,11 @@
 #' @noRd
 #' @export
 chol_det <- function(Sigma){
-  tryCatch(exp(2*sum(log(diag(chol(Sigma))))),
-           error = function(c) "Cholesky factorization didn't work. Change 'parameter_barge(..,cholesky = FALSE)'",
-           warning = function(c) "Cholesky factorization didn't work. Change 'parameter_barge(..,cholesky = FALSE)'"
-  )
+  exp(2*sum(log(diag(chol(Sigma)))))
+  #tryCatch(exp(2*sum(log(diag(chol(Sigma))))),
+  #         error = function(c) "Cholesky factorization didn't work. Change 'parameter_barge(..,cholesky = FALSE)'",
+  #         warning = function(c) "Cholesky factorization didn't work. Change 'parameter_barge(..,cholesky = FALSE)'"
+  #)
 }
 
 
@@ -17,10 +18,11 @@ chol_det <- function(Sigma){
 #' @noRd
 #' @export
 chol_inv <- function(Sigma){
-  tryCatch(chol2inv(chol(Sigma)),
-           error = function(c) "Cholesky factorization didn't work. Try 'parameter_barge(..,cholesky = FALSE)'",
-           warning = function(c) "Cholesky factorization didn't work. Try 'parameter_barge(..,cholesky = FALSE)'"
-  )
+  chol2inv(chol(Sigma))
+  #tryCatch(chol2inv(chol(Sigma)),
+  #         error = function(c) "Cholesky factorization didn't work. Try 'parameter_barge(..,cholesky = FALSE)'",
+  #         warning = function(c) "Cholesky factorization didn't work. Try 'parameter_barge(..,cholesky = FALSE)'"
+  #)
 }
 
 #' Generate and transfer parameters, quantities, and objects used for fitting downstream convergent adaptation models.
