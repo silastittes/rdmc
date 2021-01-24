@@ -58,15 +58,14 @@ calcLikelihood_bin <- function(site, selSiteLoc, det_FOmegas, inv_FOmegas, param
     if(neutral){
 
       #likelihood = 1 / (sqrt((2 * pi)^params$k * (det_FOmegas * my.e^ params$rank))) * exp(-1 / 2 * t(my.x - mu) %*% (inv_FOmegas / my.e) %*% (my.x - mu))
-
-      likelihood = -1/2*(params$k*log(2 * pi) + log(det_FOmegas) + params$rank*log(my.e)) + (-1/2 * t(my.x - mu) %*% (inv_FOmegas / my.e) %*% (my.x - mu))
+      #likelihood = -1/2*(params$k*log(2 * pi) + log(det_FOmegas) + params$rank*log(my.e)) + (-1/2 * t(my.x - mu) %*% (inv_FOmegas / my.e) %*% (my.x - mu))
+      likelihood = -1/2*(params$k*log(2 * pi) + log(det_FOmegas * my.e^ params$rank)) + (-1/2 * t(my.x - mu) %*% (inv_FOmegas / my.e) %*% (my.x - mu))
 
     } else{
 
-      likelihood = -1/2*(params$k*log(2 * pi) + log(det_FOmegas[[bin]]) + params$rank*log(my.e)) + (-1/2 * t(my.x - mu) %*% (inv_FOmegas[[bin]] / my.e) %*% (my.x - mu))
-
       #likelihood = 1 / (sqrt((2 * pi)^params$k * (det_FOmegas[[bin]] * my.e^ params$rank))) * exp(-1 / 2 * t(my.x - mu) %*% (inv_FOmegas[[bin]] / my.e) %*% (my.x - mu))
-
+      #likelihood = -1/2*(params$k*log(2 * pi) + log(det_FOmegas[[bin]]) + params$rank*log(my.e)) + (-1/2 * t(my.x - mu) %*% (inv_FOmegas[[bin]] / my.e) %*% (my.x - mu))
+      likelihood = -1/2*(params$k*log(2 * pi) + log(det_FOmegas[[bin]] * my.e^ params$rank)) + (-1/2 * t(my.x - mu) %*% (inv_FOmegas[[bin]] / my.e) %*% (my.x - mu))
 
     }
 
